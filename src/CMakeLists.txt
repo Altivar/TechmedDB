@@ -1,6 +1,52 @@
-cmake_minimum_required(VERSION 3.4)                                                                                                                                                      
-set(CMAKE_AUTOMOC ON)
-set(CMAKE_INCLUDE_CURRENT_DIR ON)
-find_package(Qt4 REQUIRED QtGui QtXml QtSql)
-add_executable(TechmedDB main.cpp)
-target_link_libraries(TechmedDB Qt4::QtGui Qt4::QtXml Qt4::QtSql)
+
+FIND_PACKAGE(Qt4 REQUIRED QtCore QtGui QtXml)
+INCLUDE(${QT_USE_FILE})
+
+# set the target libraries
+SET(TARGET_LIBS ${TARGET_LIBS} ${QT_LIBRARIES} ${VTK_LIBRARIES})
+
+
+# include the current binary dir for the generated header files (UI)
+INCLUDE_DIRECTORIES(${CMAKE_CURRENT_BINARY_DIR})
+
+include_directories(.)
+file(GLOB_RECURSE TechmedDBSrcs ./*.cpp)
+file(GLOB_RECURSE TechmedDBHeaders ./*.h)
+file(GLOB_RECURSE TechmedDBUI ./*.ui)
+
+
+QT4_WRAP_UI(TV_UISrcs ${TechmedDBUI})
+QT4_WRAP_CPP(TV_MOCSrcs ${TechmedDBHeaders})
+QT4_ADD_RESOURCES(TV_ResourceSrcs ${TechMedDBResources})
+
+SOURCE_GROUP("Resources" FILES
+  ${TechmedDBUI}
+  ${TechMedDBResources}
+  ${EXE_ICON}
+)
+
+SOURCE_GROUP("Generated" FILES
+  ${TV_UISrcs}
+  ${TV_MOCSrcs}
+  ${TV_ResourceSrcs}
+  ${TV_RCS_SOURCES}
+)
+
+ADD_DEFINITIONS(-DQT_GUI_LIBS -DQT_CORE_LIB -DQT_XML_LIB -DQT3_SUPPORT)
+SET_SOURCE_FILES_PROPERTIES(${TechmedDBSrcs} PROPERTIES
+                            OBJECT_DEPENDS "${TV_UISrcs}")
+
+# It's nice to have the ui in the windows project file... just double click on it
+# and designer comes up on that ui file :)
+IF (${CMAKE_BUILD_TOOL} MATCHES "msdev")
+  SET (TechmedDBSrcs ${TechmedDBSrcs} ${TechmedDBUI})
+ENDIF (${CMAKE_BUILD_TOOL} MATCHES "msdev")
+IF (${CMAKE_BUILD_TOOL} MATCHES "devenv")
+  SET (TechmedDBSrcs ${TechmedDBSrcs} ${TechmedDBUI})
+ENDIF (${CMAKE_BUILD_TOOL} MATCHES "devenv")
+
+
+ADD_EXECUTABLE(TechMedDB MACOSX_BUNDLE ${TechmedDBSrcs} ${TV_UISrcs} ${TV_MOCSrcs} ${TV_ResourceSrcs})
+#link_libraries(${VTK_LIBRARY_DIRS})
+TARGET_LINK_LIBRARIES(TechMedDB  ${TARGET_LIBS})
+SET_TARGET_PROPERTIES(TechMedDB PROPERTIES COMPILE_FLAGS "${SHARED_FLAGS} ${TECHMED_flags}")
