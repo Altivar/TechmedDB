@@ -9,6 +9,12 @@
 
 class Tags
 {
+private:
+	QSqlDatabase *m_DataBasePtr;
+	
+public:
+	Tags();
+	~Tags();
 };
 
 #endif // TAGS_H

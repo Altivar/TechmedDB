@@ -9,6 +9,12 @@
 
 class Files
 {
+private:
+	QSqlDatabase *m_DataBasePtr;
+	
+public:
+	Files();
+	~Files();
 };
 
 #endif // FILES_H
