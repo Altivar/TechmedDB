@@ -1,19 +1,15 @@
 BEGIN TRANSACTION;
-CREATE TABLE "User_Group" (
-	`id_group`	INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
-	`group_name`	TEXT NOT NULL,
-	`group_description`	TEXT,
-	`group_right`	INTEGER NOT NULL
-);
-INSERT INTO `User_Group` VALUES (1,'read_only',NULL,0);
-INSERT INTO `User_Group` VALUES (2,'read_add',NULL,0);
-INSERT INTO `User_Group` VALUES (3,'read_modify_add',NULL,0);
-INSERT INTO `User_Group` VALUES (4,'administrator',NULL,0);
-CREATE TABLE `User` (
-	`id_user`	INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
-	`user_name`	TEXT NOT NULL,
+CREATE TABLE User_Tag(id_user_tag INTEGER PRIMARY KEY AUTOINCREMENT, user_id INTEGER NOT NULL, tag_id INTEGER NOT NULL,FOREIGN KEY(user_id) REFERENCES User(id_user),FOREIGN KEY(tag_id) REFERENCES Tag(id_tag));
+CREATE TABLE "User" (
+	`id_user`	INTEGER PRIMARY KEY AUTOINCREMENT,
+	`user_lastname`	TEXT NOT NULL,
+	`user_firstname`	TEXT NOT NULL,
 	`user_group`	INTEGER NOT NULL,
-	FOREIGN KEY(`user_group`) REFERENCES User_Group('id_group')
+	`user_right`	INTEGER NOT NULL,
+	`user_description`	TEXT,
+	`user_passeword`	TEXT NOT NULL,
+	FOREIGN KEY(`user_group`) REFERENCES `Tag`(`id_tag`),
+	FOREIGN KEY(`user_right`) REFERENCES `Tag`(`id_tag`)
 );
 CREATE TABLE `Type` (
 	`id_type`	INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
@@ -24,6 +20,8 @@ INSERT INTO `Type` VALUES (1,'tag','tag');
 INSERT INTO `Type` VALUES (2,'modality','modality of acquirement');
 INSERT INTO `Type` VALUES (3,'pathology','pathology of patient');
 INSERT INTO `Type` VALUES (4,'region','anatommical region');
+INSERT INTO `Type` VALUES (5,'user right','define the user''s right type');
+INSERT INTO `Type` VALUES (6,'user group','define the group of the user');
 CREATE TABLE `Tag` (
 	`id_tag`	INTEGER NOT NULL,
 	`tag_name`	TEXT NOT NULL,
@@ -44,11 +42,15 @@ INSERT INTO `Tag` VALUES (8,'XRay',2,5);
 INSERT INTO `Tag` VALUES (9,'Radio',2,5);
 INSERT INTO `Tag` VALUES (10,'Radiographie',2,5);
 INSERT INTO `Tag` VALUES (11,'Rayons X',2,5);
-INSERT INTO `Tag` VALUES (12,'US',0,NULL);
-INSERT INTO `Tag` VALUES (13,'',0,NULL);
-INSERT INTO `Tag` VALUES (14,'',0,NULL);
-INSERT INTO `Tag` VALUES (15,'',0,NULL);
-INSERT INTO `Tag` VALUES (16,'',0,NULL);
+INSERT INTO `Tag` VALUES (12,'US',2,NULL);
+INSERT INTO `Tag` VALUES (13,'guest',5,NULL);
+INSERT INTO `Tag` VALUES (14,'user',5,NULL);
+INSERT INTO `Tag` VALUES (15,'admin',5,NULL);
+INSERT INTO `Tag` VALUES (16,'Dr.',6,NULL);
+INSERT INTO `Tag` VALUES (17,'Pr.',6,NULL);
+INSERT INTO `Tag` VALUES (18,'administrateur',6,NULL);
+INSERT INTO `Tag` VALUES (19,'patient',6,NULL);
+INSERT INTO `Tag` VALUES (20,'secrétaire',6,NULL);
 CREATE TABLE `File_Tag` (
 	`id_file_tag`	INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
 	`id_tag`	INTEGER NOT NULL,
