@@ -15,9 +15,15 @@ TechmedDB::TechmedDB(QWidget *parent, Qt::WFlags flags)
 
 	m_connectionDialog = new connectionDialog(this);
 	ConnectionbuttonClicked();
+	m_getfileDialog = new getfiledialog(this);
 	
 	connect(ui.actionConnect, SIGNAL(triggered()), this, SLOT(ConnectionbuttonClicked()));
 	connect(ui.actionClose, SIGNAL(triggered()), this, SLOT(close()));
+
+	connect(ui.pushButton_getfile, SIGNAL(clicked()), this, SLOT(GetFileButtonClicked()));
+	connect(ui.pushButton_getuser, SIGNAL(clicked()), this, SLOT(GetUserButtonClicked()));
+	connect(ui.pushButton_gettag, SIGNAL(clicked()), this, SLOT(GetTagButtonClicked()));
+	
 
 }
 
@@ -28,7 +34,9 @@ TechmedDB::~TechmedDB()
 
 
 
-
+//////////////////////////////////////////////////
+/////            PRIVATE METHODS             /////
+//////////////////////////////////////////////////
 void TechmedDB::ConnectAsUser(bool user)
 {
 	ui.pushButton_gettag->setVisible(user);
@@ -68,8 +76,22 @@ void TechmedDB::ConnectionbuttonClicked()
 	else
 		ui.actionConnect->setText("Changer d'utilisateur");
 
-	ConnectAsUser(!m_isFreeVisit);
+	//ConnectAsUser(!m_isFreeVisit);
 
 
 }
 
+void TechmedDB::GetFileButtonClicked()
+{
+	m_getfileDialog->exec();
+}
+
+void TechmedDB::GetUserButtonClicked()
+{
+
+}
+
+void TechmedDB::GetTagButtonClicked()
+{
+
+}

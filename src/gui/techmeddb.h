@@ -5,6 +5,7 @@
 #include "ui_techmeddb.h"
 
 #include "connectiondialog.h"
+#include "getfiledialog.h"
 
 class TechmedDB : public QMainWindow
 {
@@ -18,6 +19,10 @@ public:
 
 public slots:
 	void ConnectionbuttonClicked();
+	void GetFileButtonClicked();
+	void GetUserButtonClicked();
+	void GetTagButtonClicked();
+
 
 private:
 	void ConnectAsUser(bool user);
@@ -25,6 +30,7 @@ private:
 	Ui::TechmedDBClass ui;
 
 	connectionDialog* m_connectionDialog;
+	getfiledialog* m_getfileDialog;
 
 	bool m_isFreeVisit;
 
