@@ -1,29 +1,66 @@
-<UI version="4.0" >
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
  <class>TechmedDBClass</class>
- <widget class="QMainWindow" name="TechmedDBClass" >
-  <property name="objectName" >
-   <string notr="true">TechmedDBClass</string>
-  </property>
-  <property name="geometry" >
+ <widget class="QMainWindow" name="TechmedDBClass">
+  <property name="geometry">
    <rect>
-	<x>0</x>
-	<y>0</y>
-	<width>600</width>
-	<height>400</height>
+    <x>0</x>
+    <y>0</y>
+    <width>600</width>
+    <height>400</height>
    </rect>
   </property>
-  <property name="windowTitle" >
+  <property name="windowTitle">
    <string>TechmedDB</string>
   </property>
-  <widget class="QMenuBar" name="menuBar" />
-  <widget class="QToolBar" name="mainToolBar" />
-  <widget class="QWidget" name="centralWidget" />
-  <widget class="QStatusBar" name="statusBar" />
+  <widget class="QWidget" name="centralWidget"/>
+  <widget class="QMenuBar" name="menuBar">
+   <property name="geometry">
+    <rect>
+     <x>0</x>
+     <y>0</y>
+     <width>600</width>
+     <height>21</height>
+    </rect>
+   </property>
+   <widget class="QMenu" name="menuConnect">
+    <property name="title">
+     <string>Connexion</string>
+    </property>
+    <addaction name="actionConnect"/>
+    <addaction name="actionChangeUser"/>
+    <addaction name="actionDisconnect"/>
+   </widget>
+   <addaction name="menuConnect"/>
+  </widget>
+  <widget class="QToolBar" name="mainToolBar">
+   <attribute name="toolBarArea">
+    <enum>TopToolBarArea</enum>
+   </attribute>
+   <attribute name="toolBarBreak">
+    <bool>false</bool>
+   </attribute>
+  </widget>
+  <widget class="QStatusBar" name="statusBar"/>
+  <action name="actionConnect">
+   <property name="text">
+    <string>Connexion</string>
+   </property>
+  </action>
+  <action name="actionDisconnect">
+   <property name="text">
+    <string>Déconnexion</string>
+   </property>
+  </action>
+  <action name="actionChangeUser">
+   <property name="text">
+    <string>Changer d'utilisateur</string>
+   </property>
+  </action>
  </widget>
- <layoutDefault spacing="6" margin="11" />
- <pixmapfunction></pixmapfunction>
+ <layoutdefault spacing="6" margin="11"/>
  <resources>
-   <include location="techmeddb.qrc"/>
+  <include location="techmeddb.qrc"/>
  </resources>
  <connections/>
-</UI>
+</ui>
