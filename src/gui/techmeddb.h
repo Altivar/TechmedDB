@@ -22,6 +22,8 @@ private:
 
 	connectionDialog* m_connectionDialog;
 
+	bool m_isFreeVisit;
+
 
 };
 

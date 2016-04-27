@@ -28,8 +28,7 @@
      <string>Connexion</string>
     </property>
     <addaction name="actionConnect"/>
-    <addaction name="actionChangeUser"/>
-    <addaction name="actionDisconnect"/>
+    <addaction name="actionClose"/>
    </widget>
    <addaction name="menuConnect"/>
   </widget>
@@ -47,7 +46,7 @@
     <string>Connexion</string>
    </property>
   </action>
-  <action name="actionDisconnect">
+  <action name="actionClose">
    <property name="text">
     <string>Déconnexion</string>
    </property>
