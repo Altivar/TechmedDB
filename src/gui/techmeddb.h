@@ -14,10 +14,14 @@ public:
 	TechmedDB(QWidget *parent = 0, Qt::WFlags flags = 0);
 	~TechmedDB();
 
+	
+
 public slots:
 	void ConnectionbuttonClicked();
 
 private:
+	void ConnectAsUser(bool user);
+
 	Ui::TechmedDBClass ui;
 
 	connectionDialog* m_connectionDialog;

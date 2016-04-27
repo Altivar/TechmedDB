@@ -28,6 +28,21 @@ TechmedDB::~TechmedDB()
 
 
 
+
+void TechmedDB::ConnectAsUser(bool user)
+{
+	ui.pushButton_gettag->setVisible(user);
+	ui.pushButton_getuser->setVisible(user);
+	ui.label_set->setVisible(user);
+	ui.pushButton_setfile->setVisible(user);
+	ui.pushButton_settag->setVisible(user);
+	ui.pushButton_setuser->setVisible(user);
+	ui.line->setVisible(user);
+	ui.line_2->setVisible(user);
+	ui.pushButton_changepassword->setVisible(user);
+}
+
+
 //////////////////////////////////////////////////
 /////              PUBLIC SLOTS              /////
 //////////////////////////////////////////////////
@@ -53,5 +68,8 @@ void TechmedDB::ConnectionbuttonClicked()
 	else
 		ui.actionConnect->setText("Changer d'utilisateur");
 
+	ConnectAsUser(!m_isFreeVisit);
+
 
 }
+
