@@ -12,6 +12,16 @@
 #include <qstring.h>
 #include "TDB_DLL_Export.h"
 
+enum RightAccess
+{
+	Visitor = 0,
+	Contributor,
+	Admin
+};
+
+const int SecurityTagGuest = 13;
+
+
 #if TDB_DLL
 class DLLEXPORT DataBaseInteractor
 {
@@ -44,6 +54,8 @@ public:
 
 	bool IsConnected(){ return m_DataBase.isOpen(); }
 	QSqlDatabase* GetDatabase(){ return &m_DataBase;}
+	
+	int UserConnection(QString id, QString psw);
 
 };
 

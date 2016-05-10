@@ -107,3 +107,16 @@ void DataBaseInteractor::ReleaseInstance()
 	delete _instance;
 	_instance = 0;
 }
+
+
+int DataBaseInteractor::UserConnection(QString id, QString psw)
+{
+
+	QString query =	"SELECT user_right FROM User WHERE id_user='" + id + "' AND user_passeword='" + psw + "'";
+	QSqlQuery response = DataBaseInteractor::Instance()->m_DataBase.exec(query);
+
+	if(response.next())
+		return response.value(0).toInt() - SecurityTagGuest;
+
+	return -1;
+}

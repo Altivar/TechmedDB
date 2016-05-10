@@ -25,7 +25,7 @@ public slots:
 
 
 private:
-	void ConnectAsUser(bool user);
+	void ConnectAsUser(int user);
 
 	Ui::TechmedDBClass ui;
 
