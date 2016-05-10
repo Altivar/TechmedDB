@@ -30,6 +30,8 @@ private:
 public:
 	Users();
 	~Users();
+
+	QString GetFirstNAme(){ return m_UserFirstName;}
 };
 
 #endif // USERS_H

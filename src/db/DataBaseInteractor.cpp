@@ -9,7 +9,11 @@ DataBaseInteractor::DataBaseInteractor()
 	m_DataBaseFullName = "TechmedDB.db";
 	m_DataBasePath = ".\\..\\..\\..\\src\\db\\";
 
-	QSqlDatabase::addDatabase("QSQLITE");
+
+	QString l_DataBaseFullPathName = m_DataBasePath+m_DataBaseFullName;
+	m_DataBase = QSqlDatabase::addDatabase("QSQLITE",l_DataBaseFullPathName);
+
+	std::cout << m_DataBase.lastError().text().toStdString() << std::endl ;
 }
 
 DataBaseInteractor::~DataBaseInteractor()
@@ -23,6 +27,7 @@ bool DataBaseInteractor::ConnectDataBase()
 		std::cout << "DataBase is already connected, it will be disconnected and reconnected !" << std::endl ;
 		m_DataBase.close() ;
 	}
+
 	QString l_DataBaseFullPathName = m_DataBasePath+m_DataBaseFullName;
 	m_DataBase.setDatabaseName(l_DataBaseFullPathName);
 	bool result = m_DataBase.open() ;
@@ -30,6 +35,13 @@ bool DataBaseInteractor::ConnectDataBase()
 	if( !result)
 	{
 		std::cout << "DataBase connection error." << std::endl ;
+		std::cout << m_DataBase.lastError().text().toStdString() << std::endl ;
+
+		QFile l_File( l_DataBaseFullPathName );
+		if( l_File.exists() )
+			std::cout << l_DataBaseFullPathName.toStdString() << " file exist." << std::endl ;
+		else
+			std::cout << l_DataBaseFullPathName.toStdString() << " file does not exist." << std::endl ;
 		return false;
 	}
 	std::cout << "DataBase is connected !" << std::endl ;

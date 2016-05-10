@@ -7,6 +7,8 @@
 TechmedDB::TechmedDB(QWidget *parent, Qt::WFlags flags)
 	: QMainWindow(parent, flags)
 {
+		
+	DataBaseInteractor::Instance()->ConnectDataBase();
 	ui.setupUi(this);
 
 
@@ -23,14 +25,12 @@ TechmedDB::TechmedDB(QWidget *parent, Qt::WFlags flags)
 	connect(ui.pushButton_getfile, SIGNAL(clicked()), this, SLOT(GetFileButtonClicked()));
 	connect(ui.pushButton_getuser, SIGNAL(clicked()), this, SLOT(GetUserButtonClicked()));
 	connect(ui.pushButton_gettag, SIGNAL(clicked()), this, SLOT(GetTagButtonClicked()));
-	
-	DataBaseInteractor::Instance();
 
 }
 
 TechmedDB::~TechmedDB()
 {
-	//DataBaseInteractor::ReleaseInstance();
+	DataBaseInteractor::ReleaseInstance();
 }
 
 
