@@ -1,5 +1,5 @@
 
-FIND_PACKAGE(Qt4 REQUIRED QtCore QtGui QtXml)
+FIND_PACKAGE(Qt4 REQUIRED QtCore QtGui QtXml QtSql)
 INCLUDE(${QT_USE_FILE})
 
 # set the target libraries
