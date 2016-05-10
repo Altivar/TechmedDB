@@ -6,8 +6,9 @@
 #include <QtSql\qsqlquery>
 #include <QtSql\qsqltablemodel>
 #include <qstring.h>
+#include "TDB_DLL_Export.h"
 
-class DataBaseInteractor
+class DLLEXPORT DataBaseInteractor
 {
 private:
 	QString m_DataBasePath;

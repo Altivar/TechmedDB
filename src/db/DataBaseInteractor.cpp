@@ -91,6 +91,7 @@ DataBaseInteractor* DataBaseInteractor::Instance()
 }
 void DataBaseInteractor::ReleaseInstance()
 {
+	_instance->DisconnectDataBase();
 	delete _instance;
 	_instance = 0;
 }
