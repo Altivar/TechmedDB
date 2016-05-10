@@ -31,6 +31,9 @@ public:
 	QString GetDatabasePath();
 	bool SetDatabasePath(QString Path);
 
+	bool IsConnected(){ return m_DataBase.isOpen(); }
+	QSqlDatabase* GetDatabase(){ return &m_DataBase;}
+
 };
 
 #endif // DATABASEINTERACTOR_H

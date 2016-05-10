@@ -42,7 +42,7 @@ void DataBaseInteractor::DisconnectDataBase()
 	{
 		m_DataBase.close() ;
 	}
-	std::cout << "DataBase is closed !" << std::endl ;
+	std::cout << "DataBase disconnected." << std::endl ;
 }
 
 QString DataBaseInteractor::GetDatabaseName()
@@ -58,7 +58,7 @@ bool DataBaseInteractor::SetDatabaseName(QString FullName)
 	}
 	else
 	{
-		std::cout << "Error when setting the Database name." << std::endl ;
+		std::cout << "Error when setting the Database name, with the name : " << FullName.toStdString() << std::endl ;
 		return false ;
 	}
 }
@@ -76,7 +76,7 @@ bool DataBaseInteractor::SetDatabasePath(QString Path)
 	}
 	else
 	{
-		std::cout << "Error when setting the Database path." << std::endl ;
+		std::cout << "Error when setting the Database path, with the path : " << Path.toStdString() << std::endl ;
 		return false ;
 	}
 }
