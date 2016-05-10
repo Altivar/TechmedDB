@@ -8,8 +8,14 @@
 #include <qstring.h>
 #include "TDB_DLL_Export.h"
 
+#if TDB_DLL
 class DLLEXPORT DataBaseInteractor
 {
+#else
+class DataBaseInteractor
+{
+#endif
+
 private:
 	QString m_DataBasePath;
 	QString m_DataBaseFullName;
