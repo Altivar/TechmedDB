@@ -122,24 +122,24 @@ int DataBaseInteractor::UserConnection(QString id, QString psw)
 	return -1;
 }
 
-void DataBaseInteractor::FileResearch(int idPatient,
-	int idFile,
-	int idAuthor)
+void DataBaseInteractor::FileResearch(unsigned int idPatient,
+	unsigned int idFile,
+	unsigned int idAuthor)
 {
 
 	int resultSize;
 	int column;
-	int alreadyDone = 0;
+	bool alreadyDone = false;
 
 	QVariant *fileDesc;
 	std::vector<Files> resultTable;
 
-	QString query =	"SELECT id_file, file_url, file_source, file_author, file_patient, file_creation_date, file_fast_modification_date, file_md5sum FROM User WHERE";
+	QString query =	"SELECT id_file, file_url, file_source, file_author, file_patient, file_creation_date, file_fast_modification_date, file_md5sum FROM User ";
 
 	column=8;
 	fileDesc = new QVariant[column];
 
-	if ( idPatient !=-1 )
+	if ( idPatient != 0 )
 	{
 		if(!alreadyDone)
 			query = query + "WHERE ";
@@ -147,10 +147,10 @@ void DataBaseInteractor::FileResearch(int idPatient,
 			query = query + "AND ";
 		query = query +  "file_patient = '" + idPatient + "'";
 
-		alreadyDone++;
+		alreadyDone = true;
 	}
 
-	if ( idFile !=-1 )
+	if ( idFile != 0 )
 	{
 		if(!alreadyDone)
 			query = query + "WHERE ";
@@ -158,24 +158,27 @@ void DataBaseInteractor::FileResearch(int idPatient,
 			query = query + "AND ";
 		query = query +  "id_file = '" + idFile + "'";
 
-		alreadyDone++;
+		alreadyDone = true;
 	}
 
-	if ( idAuthor !=-1 )
+	if ( idAuthor != 0 )
 	{
 		if(!alreadyDone)
 			query = query + "WHERE ";
 		else
 			query = query + "AND ";
-		query = query +  "file_author = '" + idAuthor + "'";
+		query += "file_author = '" + QString::number(idAuthor) + "'";
 
-		alreadyDone++;
+		alreadyDone = true;
 	}
 
+	
 	QSqlQuery response = DataBaseInteractor::Instance()->m_DataBase.exec(query);
 	
+	std::cout << "Query response :" << std::endl;
 	while(response.next())
 	{
+		std::cout << "File !" << std::endl;
 		for(int i=0 ; i < column ; i++)
 		{
 			fileDesc[i]=response.value(i);
