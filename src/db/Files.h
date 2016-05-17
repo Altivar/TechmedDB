@@ -8,7 +8,7 @@
 #include <qstring.h>
 #include "DB_Base.h"
 
-class Files :DB_Base
+class Files
 {
 private:
 	int m_IdFile;

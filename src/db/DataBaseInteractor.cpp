@@ -134,7 +134,7 @@ void DataBaseInteractor::FileResearch(unsigned int idPatient,
 	QVariant *fileDesc;
 	std::vector<Files> resultTable;
 
-	QString query =	"SELECT id_file, file_url, file_source, file_author, file_patient, file_creation_date, file_fast_modification_date, file_md5sum FROM User ";
+	QString query =	"SELECT id_file, file_url, file_source, file_author, file_patient, file_creation_date, file_last_modification_date, file_md5sum FROM File ";
 
 	column=8;
 	fileDesc = new QVariant[column];
@@ -145,7 +145,7 @@ void DataBaseInteractor::FileResearch(unsigned int idPatient,
 			query = query + "WHERE ";
 		else
 			query = query + "AND ";
-		query = query +  "file_patient = '" + idPatient + "'";
+		query = query +  "file_patient = '" + QString::number(idPatient) + "'";
 
 		alreadyDone = true;
 	}
@@ -156,7 +156,7 @@ void DataBaseInteractor::FileResearch(unsigned int idPatient,
 			query = query + "WHERE ";
 		else
 			query = query + "AND ";
-		query = query +  "id_file = '" + idFile + "'";
+		query = query +  "id_file = '" + QString::number(idFile) + "'";
 
 		alreadyDone = true;
 	}
