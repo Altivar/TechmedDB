@@ -25,7 +25,7 @@
   <property name="windowTitle">
    <string>getfiledialog</string>
   </property>
-  <widget class="QCheckBox" name="checkBox">
+  <widget class="QCheckBox" name="checkBox_IdPatient">
    <property name="geometry">
     <rect>
      <x>20</x>
@@ -38,7 +38,7 @@
     <string>Identifiant Patient</string>
    </property>
   </widget>
-  <widget class="QLineEdit" name="lineEdit_2">
+  <widget class="QLineEdit" name="lineEdit_Tag1">
    <property name="geometry">
     <rect>
      <x>140</x>
@@ -48,7 +48,7 @@
     </rect>
    </property>
   </widget>
-  <widget class="QLineEdit" name="lineEdit_4">
+  <widget class="QLineEdit" name="lineEdit_Tag3">
    <property name="geometry">
     <rect>
      <x>170</x>
@@ -58,7 +58,7 @@
     </rect>
    </property>
   </widget>
-  <widget class="QLineEdit" name="lineEdit_3">
+  <widget class="QLineEdit" name="lineEdit_Tag2">
    <property name="geometry">
     <rect>
      <x>170</x>
@@ -68,7 +68,7 @@
     </rect>
    </property>
   </widget>
-  <widget class="QCheckBox" name="checkBox_2">
+  <widget class="QCheckBox" name="checkBox_TagsFile">
    <property name="geometry">
     <rect>
      <x>20</x>
@@ -81,7 +81,7 @@
     <string>Tags Fichier</string>
    </property>
   </widget>
-  <widget class="QLineEdit" name="lineEdit">
+  <widget class="QLineEdit" name="lineEdit_IdPatient">
    <property name="geometry">
     <rect>
      <x>140</x>
@@ -117,7 +117,7 @@
     <string>ET</string>
    </property>
   </widget>
-  <widget class="QLineEdit" name="lineEdit_5">
+  <widget class="QLineEdit" name="lineEdit_IdFile">
    <property name="geometry">
     <rect>
      <x>140</x>
@@ -127,7 +127,7 @@
     </rect>
    </property>
   </widget>
-  <widget class="QCheckBox" name="checkBox_3">
+  <widget class="QCheckBox" name="checkBox_IdFile">
    <property name="geometry">
     <rect>
      <x>20</x>
@@ -140,7 +140,7 @@
     <string>Identifiant Fichier</string>
    </property>
   </widget>
-  <widget class="QLineEdit" name="lineEdit_6">
+  <widget class="QLineEdit" name="lineEdit_IdAuthor">
    <property name="geometry">
     <rect>
      <x>140</x>
@@ -150,7 +150,7 @@
     </rect>
    </property>
   </widget>
-  <widget class="QCheckBox" name="checkBox_4">
+  <widget class="QCheckBox" name="checkBox_IdAuthor">
    <property name="geometry">
     <rect>
      <x>20</x>
@@ -163,7 +163,7 @@
     <string>Identifiant Auteur</string>
    </property>
   </widget>
-  <widget class="QPushButton" name="pushButton">
+  <widget class="QPushButton" name="pushButton_Start">
    <property name="geometry">
     <rect>
      <x>90</x>

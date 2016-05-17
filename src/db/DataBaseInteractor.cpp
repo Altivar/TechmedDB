@@ -122,7 +122,9 @@ int DataBaseInteractor::UserConnection(QString id, QString psw)
 	return -1;
 }
 
-void DataBaseInteractor::FileResearch(int idPatient, int idFile, int idAuthor)
+void DataBaseInteractor::FileResearch(unsigned int idPatient,
+	unsigned int idFile,
+	unsigned int idAuthor)
 {
 
 	QString l_QueryStr( "SELECT * FROM Files WHERE id_File = " + QString::number(idFile) + " AND file_patient = " + QString::number(idPatient)  + " AND file_author = " + QString::number(idAuthor) + " ;");

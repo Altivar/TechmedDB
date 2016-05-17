@@ -8,7 +8,6 @@
 #include <qstring.h>
 #include "DB_Base.h"
 
-class Files : public DB_Base
 {
 private:
 	unsigned int m_IdFile;

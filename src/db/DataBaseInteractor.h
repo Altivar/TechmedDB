@@ -63,9 +63,9 @@ public:
 
 	// Querry
 	void FileResearch(
-		int idPatient = -1,
-		int idFile = -1,
-		int idAuthor = -1
+		unsigned int idPatient = -1,
+		unsigned int idFile = -1,
+		unsigned int idAuthor = -1
 		);
 
 };
