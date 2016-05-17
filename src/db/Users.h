@@ -4,17 +4,17 @@
 #include <iostream>
 #include <QtSql\qsqldatabase.h>
 #include <QtSql\qsqlquery>
+#include <QtSql\qsqlrecord.h>
 #include <QtSql\qsqltablemodel>
 #include <qstring.h>
 #include <qmap.h>
 #include <qvector.h>
 #include <qpair.h>
+#include "DB_Base.h"
 
-class Users
+class Users : DB_Base
 {
 private:
-	QSqlDatabase *m_DataBasePtr;
-
 	unsigned int m_UserID;
 	QPair<unsigned int,QString> m_UserGroupRefAndName;
 	QPair<unsigned int,QString> m_UserRightRefAndName;
@@ -26,12 +26,20 @@ private:
 
 	QMap<unsigned int,QString> m_UserTags;
 
+	void BuildUserTagsMap();
+
 
 public:
 	Users();
+	Users(unsigned int ID, QString FirstName, QString LastName, QPair<unsigned int,QString> Group, QPair<unsigned int,QString> Right, QString Password, QString Desc);
 	~Users();
 
-	QString GetFirstNAme(){ return m_UserFirstName;}
+	QString GetFirstName(){ return m_UserFirstName;}
+	QString GetLastName(){ return m_UserLastName;}
+	QMap<unsigned int,QString> GetUserTags() { return m_UserTags; }
+
+	QVector<Users> GetUserByNames(QString FirstName, QString LasName);
+	QVector<Users> GetUserById(unsigned int id);
 };
 
 #endif // USERS_H
