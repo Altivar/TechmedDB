@@ -122,13 +122,46 @@ int DataBaseInteractor::UserConnection(QString id, QString psw)
 	return -1;
 }
 
-void DataBaseInteractor::FileResearch(unsigned int idPatient,
-	unsigned int idFile,
-	unsigned int idAuthor)
+void DataBaseInteractor::FileResearch(unsigned int idPatient, unsigned int idFile, unsigned int idAuthor)
 {
 
-	QString l_QueryStr( "SELECT * FROM Files WHERE id_File = " + QString::number(idFile) + " AND file_patient = " + QString::number(idPatient)  + " AND file_author = " + QString::number(idAuthor) + " ;");
-	QSqlQuery l_Query = DataBaseInteractor::Instance()->GetDatabase()->exec(l_QueryStr);
+	QString l_QueryStr( "SELECT * FROM File ") ;
+	bool l_NeedInc = false ;
+
+	if( idFile != 0 )
+	{
+		l_QueryStr += "WHERE id_File = " + QString::number(idFile) ;
+		l_NeedInc = true;
+	}
+	if( idPatient != 0)
+	{
+		if( l_NeedInc )
+		{
+			l_QueryStr+= " AND " ;
+			l_NeedInc = false ;
+		}	
+		else
+		{
+			l_QueryStr += "WHERE " ;
+		}
+		l_QueryStr += "file_patient = " + QString::number(idPatient) ;
+		l_NeedInc = true;
+	} 
+	if( idAuthor != 0)
+	{
+		if( l_NeedInc )
+		{
+			l_QueryStr+= " AND " ;
+			l_NeedInc = false ;
+		}else
+		{
+			l_QueryStr += "WHERE " ;
+		}
+		l_QueryStr += "file_author = " + QString::number(idAuthor) ;
+		l_NeedInc = true;
+	}
+	l_QueryStr+= " ;";
+	QSqlQuery l_Query = m_DataBase.exec(l_QueryStr);
 
 	QVector<Files> l_Result ;
 
@@ -144,6 +177,7 @@ void DataBaseInteractor::FileResearch(unsigned int idPatient,
 
 	while( l_Query.next() )
 	{
+		std::cout << "File(s) founded !" << std::endl ;
 		l_Result.push_back( Files(	l_Query.value(id_file_field).toUInt(),
 									l_Query.value(url_field).toString(),
 									l_Query.value(sourcefile_field).toUInt(),
@@ -157,10 +191,13 @@ void DataBaseInteractor::FileResearch(unsigned int idPatient,
 	}
 
 	// for debug
+	std::cout << l_Result.size() << " files found!" << std::endl ;
 	QVector<Files>::iterator aIt = l_Result.begin();
 	for(aIt; aIt != l_Result.end(); aIt++)
 	{
-		std::cout << "File : " << (*aIt).GetId() << std::endl ;
-		std::cout << "		with the path : " << (*aIt).GetURL().toStdString() << std::endl ;
+		std::cout << " + File : " << (*aIt).GetId() << std::endl ;
+		std::cout << " ---> with the path : " << (*aIt).GetURL().toStdString() << std::endl ;
 	}
+
+	std::cout << m_DataBase.lastError().text().toStdString() << std::endl ;
 }
