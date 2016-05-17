@@ -6,11 +6,11 @@
 #include <QtSql\qsqlquery>
 #include <QtSql\qsqltablemodel>
 #include <qstring.h>
+#include "DB_Base.h"
 
-class Files
+class Files :DB_Base
 {
 private:
-	QSqlDatabase *m_DataBasePtr;
 	
 public:
 	Files();

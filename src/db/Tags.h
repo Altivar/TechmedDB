@@ -6,11 +6,11 @@
 #include <QtSql\qsqlquery>
 #include <QtSql\qsqltablemodel>
 #include <qstring.h>
+#include "DB_Base.h"
 
-class Tags
+class Tags : DB_Base
 {
 private:
-	QSqlDatabase *m_DataBasePtr;
 	
 public:
 	Tags();
