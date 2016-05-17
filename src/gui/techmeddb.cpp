@@ -4,6 +4,8 @@
 
 #include <iostream>
 
+
+
 TechmedDB::TechmedDB(QWidget *parent, Qt::WFlags flags)
 	: QMainWindow(parent, flags)
 {
@@ -38,17 +40,17 @@ TechmedDB::~TechmedDB()
 //////////////////////////////////////////////////
 /////            PRIVATE METHODS             /////
 //////////////////////////////////////////////////
-void TechmedDB::ConnectAsUser(bool user)
+void TechmedDB::ConnectAsUser(int user)
 {
-	ui.pushButton_gettag->setVisible(user);
-	ui.pushButton_getuser->setVisible(user);
-	ui.label_set->setVisible(user);
-	ui.pushButton_setfile->setVisible(user);
-	ui.pushButton_settag->setVisible(user);
-	ui.pushButton_setuser->setVisible(user);
-	ui.line->setVisible(user);
-	ui.line_2->setVisible(user);
-	ui.pushButton_changepassword->setVisible(user);
+	ui.pushButton_gettag->setVisible(user > 0);
+	ui.pushButton_getuser->setVisible(user > 0);
+	ui.label_set->setVisible(user > 0);
+	ui.pushButton_setfile->setVisible(user > 0);
+	ui.pushButton_settag->setVisible(user > 0);
+	ui.pushButton_setuser->setVisible(user > 1);
+	ui.line->setVisible(user > 0);
+	ui.line_2->setVisible(user > 0);	
+	ui.pushButton_changepassword->setVisible(user > 0);
 }
 
 
@@ -59,25 +61,41 @@ void TechmedDB::ConnectionbuttonClicked()
 {
 	
 	bool isConnected = false;
+	int result = 0;
 	do
 	{
 		m_connectionDialog->ResetDialog();
 		m_connectionDialog->exec();
 
-		// test connection here
+		if(m_connectionDialog->IsFreeVisitSelected())
+			break;
 
+		// test connection here
+		result = DataBaseInteractor::Instance()->UserConnection(m_connectionDialog->GetConnectionId(), m_connectionDialog->GetConnectionPassword());
+		std::cout << result << std::endl;
+
+		if(result == -1)
+			continue;
+
+		isConnected = true;
+		
 	}
-	while(m_connectionDialog->IsFreeVisitSelected() != true);
+	while(m_connectionDialog->IsFreeVisitSelected() != true && !isConnected);
 
 
 	// update application mode
 	m_isFreeVisit = m_connectionDialog->IsFreeVisitSelected();
 	if(m_isFreeVisit)
+	{
 		ui.actionConnect->setText("Connexion");
+	}
 	else
+	{
 		ui.actionConnect->setText("Changer d'utilisateur");
-
-	//ConnectAsUser(!m_isFreeVisit);
+	}
+	
+	ConnectAsUser(result);
+	
 
 
 }
