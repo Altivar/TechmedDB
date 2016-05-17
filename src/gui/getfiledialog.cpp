@@ -5,7 +5,9 @@ getfiledialog::getfiledialog(QWidget *parent, Qt::WFlags flags)
 {
 	ui.setupUi(this);
 
-	connect(ui.pushButton_Start, SIGNAL(clicked()), this, SLOT(close()));
+	m_hasExit = true;
+
+	connect(ui.pushButton_Start, SIGNAL(clicked()), this, SLOT(LaunchRequest()));
 }
 
 getfiledialog::~getfiledialog()
@@ -13,6 +15,10 @@ getfiledialog::~getfiledialog()
 
 }
 
+void getfiledialog::ResetFileDialog()
+{
+	m_hasExit = true;
+}
 
 QStringList getfiledialog::GetTags()
 {
@@ -57,5 +63,9 @@ unsigned int getfiledialog::GetAuthorID()
 	return 0;
 }
 
-
+void getfiledialog::LaunchRequest()
+{
+	m_hasExit = false;
+	close();
+}
 

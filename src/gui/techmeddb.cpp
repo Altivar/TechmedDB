@@ -102,13 +102,18 @@ void TechmedDB::ConnectionbuttonClicked()
 
 void TechmedDB::GetFileButtonClicked()
 {
+
+	m_getfileDialog->ResetFileDialog();
 	m_getfileDialog->exec();
 
-	std::cout << "Get file dialog : " << std::endl;
+	std::cout << std::endl << "Get file dialog : " << std::endl;
 	std::cout << "File Tag : " << ((m_getfileDialog->IsFileTagActive())?"Checked":"Not checked") << std::endl;
 	std::cout << "Patient ID : " << ((m_getfileDialog->IsPatientIDActive())?"Checked":"Not checked") << std::endl;
 	std::cout << "File ID : " << ((m_getfileDialog->IsFileIDActive())?"Checked":"Not checked") << std::endl;
-	std::cout << "Author ID : " << ((m_getfileDialog->IsAuthorIDActive())?"Checked":"Not checked") << std::endl;
+	std::cout << "Author ID : " << ((m_getfileDialog->IsAuthorIDActive())?"Checked":"Not checked") << std::endl << std::endl;
+
+	if(m_getfileDialog->HasExit())
+		return;
 
 	DataBaseInteractor::Instance()->FileResearch(
 		((m_getfileDialog->IsPatientIDActive())?m_getfileDialog->GetPatientID():0),
