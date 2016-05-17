@@ -39,13 +39,13 @@ QVector<Users> Users::GetUserByNames(QString FirstName, QString LasName)
 
 	QVector<Users> l_Result ;
 
-	int id_field = l_Query.record().indexOf("_id");
+	int id_field		= l_Query.record().indexOf("_id");
 	int firstName_field = l_Query.record().indexOf("user_firstname");
-	int lastName_field = l_Query.record().indexOf("user_lastname");
-	int groupRef_field = l_Query.record().indexOf("user_group");
-	int rightRef_field = l_Query.record().indexOf("user_right");
-	int desc_field = l_Query.record().indexOf("user_description");
-	int password_field = l_Query.record().indexOf("user_password");
+	int lastName_field	= l_Query.record().indexOf("user_lastname");
+	int groupRef_field	= l_Query.record().indexOf("user_group");
+	int rightRef_field	= l_Query.record().indexOf("user_right");
+	int desc_field		= l_Query.record().indexOf("user_description");
+	int password_field	= l_Query.record().indexOf("user_password");
 
 	while( l_Query.next() )
 	{
@@ -70,13 +70,13 @@ QVector<Users> Users::GetUserById(unsigned int id)
 
 	QVector<Users> l_Result ;
 
-	int id_field = l_Query.record().indexOf("_id");
+	int id_field		= l_Query.record().indexOf("_id");
 	int firstName_field = l_Query.record().indexOf("user_firstname");
-	int lastName_field = l_Query.record().indexOf("user_lastname");
-	int groupRef_field = l_Query.record().indexOf("user_group");
-	int rightRef_field = l_Query.record().indexOf("user_right");
-	int desc_field = l_Query.record().indexOf("user_description");
-	int password_field = l_Query.record().indexOf("user_password");
+	int lastName_field	= l_Query.record().indexOf("user_lastname");
+	int groupRef_field	= l_Query.record().indexOf("user_group");
+	int rightRef_field	= l_Query.record().indexOf("user_right");
+	int desc_field		= l_Query.record().indexOf("user_description");
+	int password_field	= l_Query.record().indexOf("user_password");
 
 	while( l_Query.next() )
 	{
