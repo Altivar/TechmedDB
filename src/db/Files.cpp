@@ -87,8 +87,8 @@ Files::~Files()
 
 
 
-QVector<Files> Files::GetFileFromIds( unsigned int IdFile,unsigned int IdPatient,unsigned int IdAuthor )
-{
+//QVector<Files> Files::GetFileFromIds( unsigned int IdFile,unsigned int IdPatient,unsigned int IdAuthor )
+//{
 	//QString l_QueryStr( "SELECT * FROM " + m_TABLENAME + " WHERE id_File = " + QString::number(IdFile) + " AND file_patient = " + QString::number(IdPatient)  + " AND file_author = " + QString::number(IdAuthor) + " ;");
 	//QSqlQuery l_Query = QSqlQuery(l_QueryStr);
 
@@ -118,4 +118,4 @@ QVector<Files> Files::GetFileFromIds( unsigned int IdFile,unsigned int IdPatient
 	//								
 	//}
 	//return l_Result;
-}
+//}

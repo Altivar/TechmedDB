@@ -8,6 +8,7 @@
 #include <qstring.h>
 #include "DB_Base.h"
 
+class Files : public DB_Base
 {
 private:
 	unsigned int m_IdFile;
@@ -43,7 +44,7 @@ public:
 		);
 	~Files();
 
-	QVector<Files> GetFileFromIds( unsigned int IdFile,unsigned int IdPatient,unsigned int IdAuthor );
+	//QVector<Files> GetFileFromIds( unsigned int IdFile,unsigned int IdPatient,unsigned int IdAuthor );
 
 	QString GetURL(){ return m_FileUrl; }
 	//void SetURL(QString url){ m_FileUrl = url; }
