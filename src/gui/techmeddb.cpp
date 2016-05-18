@@ -2,6 +2,7 @@
 
 #include "../db/DataBaseInteractor.h"
 
+
 #include <iostream>
 
 
@@ -20,6 +21,7 @@ TechmedDB::TechmedDB(QWidget *parent, Qt::WFlags flags)
 	m_connectionDialog = new connectionDialog(this);
 	ConnectionbuttonClicked();
 	m_getfileDialog = new getfiledialog(this);
+	m_passwordManager = new PasswordManager(this);
 	
 	connect(ui.actionConnect, SIGNAL(triggered()), this, SLOT(ConnectionbuttonClicked()));
 	connect(ui.actionClose, SIGNAL(triggered()), this, SLOT(close()));
@@ -27,7 +29,7 @@ TechmedDB::TechmedDB(QWidget *parent, Qt::WFlags flags)
 	connect(ui.pushButton_getfile, SIGNAL(clicked()), this, SLOT(GetFileButtonClicked()));
 	connect(ui.pushButton_getuser, SIGNAL(clicked()), this, SLOT(GetUserButtonClicked()));
 	connect(ui.pushButton_gettag, SIGNAL(clicked()), this, SLOT(GetTagButtonClicked()));
-
+	connect(ui.pushButton_changepassword, SIGNAL(clicked()), this, SLOT(ChangePasswordButtonClicked()));
 }
 
 TechmedDB::~TechmedDB()
@@ -133,3 +135,12 @@ void TechmedDB::GetTagButtonClicked()
 {
 
 }
+
+void TechmedDB::ChangePasswordButtonClicked()
+{
+	m_passwordManager->Reset();
+	m_passwordManager->exec();
+
+}
+
+

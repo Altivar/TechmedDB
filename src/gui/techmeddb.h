@@ -6,6 +6,7 @@
 
 #include "connectiondialog.h"
 #include "getfiledialog.h"
+#include "PasswordManager.h"
 
 class TechmedDB : public QMainWindow
 {
@@ -22,7 +23,7 @@ public slots:
 	void GetFileButtonClicked();
 	void GetUserButtonClicked();
 	void GetTagButtonClicked();
-
+	void ChangePasswordButtonClicked();
 
 private:
 	void ConnectAsUser(int user);
@@ -31,8 +32,10 @@ private:
 
 	connectionDialog* m_connectionDialog;
 	getfiledialog* m_getfileDialog;
+	PasswordManager* m_passwordManager;
 
 	bool m_isFreeVisit;
+
 
 
 };
