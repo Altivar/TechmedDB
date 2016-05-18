@@ -122,67 +122,82 @@ int DataBaseInteractor::UserConnection(QString id, QString psw)
 	return -1;
 }
 
-void DataBaseInteractor::FileResearch(unsigned int idPatient,
-	unsigned int idFile,
-	unsigned int idAuthor)
+void DataBaseInteractor::FileResearch(unsigned int idPatient, unsigned int idFile, unsigned int idAuthor)
 {
 
-	int resultSize;
-	int column;
-	bool alreadyDone = false;
+	QString l_QueryStr( "SELECT * FROM File ") ;
+	bool l_NeedInc = false ;
 
-	QVariant *fileDesc;
-	std::vector<Files> resultTable;
-
-	QString query =	"SELECT id_file, file_url, file_source, file_author, file_patient, file_creation_date, file_last_modification_date, file_md5sum FROM File ";
-
-	column=8;
-	fileDesc = new QVariant[column];
-
-	if ( idPatient != 0 )
+	if( idFile != 0 )
 	{
-		if(!alreadyDone)
-			query = query + "WHERE ";
-		else
-			query = query + "AND ";
-		query = query +  "file_patient = '" + QString::number(idPatient) + "'";
-
-		alreadyDone = true;
+		l_QueryStr += "WHERE id_File = " + QString::number(idFile) ;
+		l_NeedInc = true;
 	}
-
-	if ( idFile != 0 )
+	if( idPatient != 0)
 	{
-		if(!alreadyDone)
-			query = query + "WHERE ";
-		else
-			query = query + "AND ";
-		query = query +  "id_file = '" + QString::number(idFile) + "'";
-
-		alreadyDone = true;
-	}
-
-	if ( idAuthor != 0 )
-	{
-		if(!alreadyDone)
-			query = query + "WHERE ";
-		else
-			query = query + "AND ";
-		query += "file_author = '" + QString::number(idAuthor) + "'";
-
-		alreadyDone = true;
-	}
-
-	
-	QSqlQuery response = DataBaseInteractor::Instance()->m_DataBase.exec(query);
-	
-	std::cout << "Query response :" << std::endl;
-	while(response.next())
-	{
-		std::cout << "File !" << std::endl;
-		for(int i=0 ; i < column ; i++)
+		if( l_NeedInc )
 		{
-			fileDesc[i]=response.value(i);
+			l_QueryStr+= " AND " ;
+			l_NeedInc = false ;
+		}	
+		else
+		{
+			l_QueryStr += "WHERE " ;
 		}
-		resultTable.push_back(Files(fileDesc));
+		l_QueryStr += "file_patient = " + QString::number(idPatient) ;
+		l_NeedInc = true;
+	} 
+	if( idAuthor != 0)
+	{
+		if( l_NeedInc )
+		{
+			l_QueryStr+= " AND " ;
+			l_NeedInc = false ;
+		}else
+		{
+			l_QueryStr += "WHERE " ;
+		}
+		l_QueryStr += "file_author = " + QString::number(idAuthor) ;
+		l_NeedInc = true;
 	}
+	l_QueryStr+= " ;";
+	QSqlQuery l_Query = m_DataBase.exec(l_QueryStr);
+
+	QVector<Files> l_Result ;
+
+	int id_file_field						= l_Query.record().indexOf("id_File");
+	int url_field							= l_Query.record().indexOf("file_url");
+	int sourcefile_field					= l_Query.record().indexOf("file_source");
+	int file_author_field					= l_Query.record().indexOf("file_author");
+	int file_patient_field					= l_Query.record().indexOf("file_patient");
+	int file_creation_date_field			= l_Query.record().indexOf("file_creation_date");
+	int file_last_modification_date_field	= l_Query.record().indexOf("file_last_modification_date");
+	int file_md5sum_field					= l_Query.record().indexOf("file_md5sum");
+
+
+	while( l_Query.next() )
+	{
+		std::cout << "File(s) founded !" << std::endl ;
+		l_Result.push_back( Files(	l_Query.value(id_file_field).toUInt(),
+									l_Query.value(url_field).toString(),
+									l_Query.value(sourcefile_field).toUInt(),
+									l_Query.value(file_author_field).toUInt(),
+									l_Query.value(file_patient_field).toUInt(),
+									l_Query.value(file_creation_date_field).toString(),
+									l_Query.value(file_last_modification_date_field).toString(),
+									l_Query.value(file_md5sum_field).toString()
+								 )) ;
+									
+	}
+
+	// for debug
+	std::cout << l_Result.size() << " files found!" << std::endl ;
+	QVector<Files>::iterator aIt = l_Result.begin();
+	for(aIt; aIt != l_Result.end(); aIt++)
+	{
+		std::cout << " + File : " << (*aIt).GetId() << std::endl ;
+		std::cout << " ---> with the path : " << (*aIt).GetURL().toStdString() << std::endl ;
+	}
+
+	std::cout << m_DataBase.lastError().text().toStdString() << std::endl ;
 }

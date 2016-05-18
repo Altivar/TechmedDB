@@ -1,4 +1,5 @@
 #include "DB_Base.h"
+#include "DataBaseInteractor.h"
 
 DB_Base::DB_Base()
 {

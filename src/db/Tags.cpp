@@ -1,6 +1,7 @@
 #include "Tags.h"
 
-Tags::Tags()
+Tags::Tags() :
+DB_Base()
 {
 }
 

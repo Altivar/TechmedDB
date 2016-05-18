@@ -1,18 +1,9 @@
 #ifndef USERS_H
 #define USERS_H
 
-#include <iostream>
-#include <QtSql\qsqldatabase.h>
-#include <QtSql\qsqlquery>
-#include <QtSql\qsqlrecord.h>
-#include <QtSql\qsqltablemodel>
-#include <qstring.h>
-#include <qmap.h>
-#include <qvector.h>
-#include <qpair.h>
 #include "DB_Base.h"
 
-class Users : DB_Base
+class Users : public DB_Base
 {
 private:
 	unsigned int m_UserID;
@@ -40,6 +31,9 @@ public:
 
 	QVector<Users> GetUserByNames(QString FirstName, QString LasName);
 	QVector<Users> GetUserById(unsigned int id);
+
+
+	//virtual QSqlQuery GetAllTable(){ return QSqlQuery("SELECT * FROM " + this->m_TABLENAME ); }
 };
 
 #endif // USERS_H
