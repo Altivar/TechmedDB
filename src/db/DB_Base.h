@@ -14,7 +14,6 @@
 class DB_Base
 {
 protected:
-	QSqlDatabase *m_DataBasePtr;
 	QString m_TABLENAME;
 	
 public:

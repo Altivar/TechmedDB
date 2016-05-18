@@ -14,16 +14,15 @@
 #include "TDB_DLL_Export.h"
 
 #include "Files.h"
+#include "Users.h"
 
-enum RightAccess
+enum USER_RIGHT
 {
-	Visitor = 0,
-	Contributor,
-	Admin
+	ERROR_NO_RIGHT = 0,
+	GUEST_USER = 1,
+	STANDAR_USER,
+	ADMINISTRATOR_USER
 };
-
-const int SecurityTagGuest = 13;
-
 
 #if TDB_DLL
 class DLLEXPORT DataBaseInteractor
@@ -38,6 +37,9 @@ private:
 	QString m_DataBaseFullName;
 
 	QSqlDatabase m_DataBase;
+
+	QMap<unsigned int,USER_RIGHT> m_UsersRightMap ;
+	Users m_CurrentUser ;
 
 private:
 	DataBaseInteractor();
@@ -62,11 +64,8 @@ public:
 	int UserConnection(QString id, QString psw);
 
 	// Querry
-	void FileResearch(
-		unsigned int idPatient = -1,
-		unsigned int idFile = -1,
-		unsigned int idAuthor = -1
-		);
+	bool FileResearch(unsigned int idPatient = 0, unsigned int idFile = 0, unsigned int idAuthor = 0 );
+	bool UserResearch(unsigned int idUser = 0, QString LastName = QString::null, QString FirstName = QString::null );
 
 };
 

@@ -1,9 +1,7 @@
 #include "DB_Base.h"
-#include "DataBaseInteractor.h"
 
 DB_Base::DB_Base()
 {
-	m_DataBasePtr = DataBaseInteractor::Instance()->GetDatabase();
 }
 
 DB_Base::~DB_Base()
