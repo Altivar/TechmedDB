@@ -16,15 +16,13 @@
 #include "Files.h"
 #include "Users.h"
 
-enum RightAccess
+enum USER_RIGHT
 {
-	Visitor = 0,
-	Contributor,
-	Admin
+	ERROR_NO_RIGHT = 0,
+	GUEST_USER = 1,
+	STANDAR_USER,
+	ADMINISTRATOR_USER
 };
-
-const int SecurityTagGuest = 13;
-
 
 #if TDB_DLL
 class DLLEXPORT DataBaseInteractor
@@ -39,6 +37,9 @@ private:
 	QString m_DataBaseFullName;
 
 	QSqlDatabase m_DataBase;
+
+	QMap<unsigned int,USER_RIGHT> m_UsersRightMap ;
+	Users m_CurrentUser ;
 
 private:
 	DataBaseInteractor();

@@ -13,8 +13,6 @@ DataBaseInteractor::DataBaseInteractor()
 
 	QString l_DataBaseFullPathName = m_DataBasePath+m_DataBaseFullName;
 	m_DataBase = QSqlDatabase::addDatabase("QSQLITE",l_DataBaseFullPathName);
-
-	std::cout << m_DataBase.lastError().text().toStdString() << std::endl ;
 }
 
 DataBaseInteractor::~DataBaseInteractor()
@@ -46,6 +44,36 @@ bool DataBaseInteractor::ConnectDataBase()
 		return false;
 	}
 	std::cout << "DataBase is connected !" << std::endl ;
+
+	// fill the global data from the database
+	QString l_QueryStr( "SELECT * FROM Tag WHERE tag_type = 5 ;") ;
+	QSqlQuery l_Query = m_DataBase.exec(l_QueryStr);
+	int id_Tag_field  = l_Query.record().indexOf("id_Tag");
+	int TagName_field = l_Query.record().indexOf("tag_name");
+	int TagType_field = l_Query.record().indexOf("tag_type");
+	int TagRef_field  = l_Query.record().indexOf("tag_reference");
+	QStringList l_UsersTypes ;
+	l_UsersTypes << "guest" << "user" << "admin" ;
+	while( l_Query.next() )
+	{
+		switch( l_UsersTypes.indexOf( l_Query.value(TagName_field).toString() ) )
+		{
+		case 0: 
+			m_UsersRightMap[l_Query.value(id_Tag_field).toUInt()]=GUEST_USER;
+			break ;
+		case 1: 
+			m_UsersRightMap[l_Query.value(id_Tag_field).toUInt()]=STANDAR_USER;
+			break ;
+		case 2:
+			m_UsersRightMap[l_Query.value(id_Tag_field).toUInt()]=ADMINISTRATOR_USER;
+			break ;
+		default :
+			std::cout << "User right unknow ! It is be setted to guest." << std::endl ;
+			m_UsersRightMap[l_Query.value(id_Tag_field).toUInt()]=GUEST_USER;
+			break;
+		}		
+	}
+	std::cout << m_DataBase.lastError().text().toStdString() << std::endl ;
 	return result ;
 }
 
@@ -112,14 +140,61 @@ void DataBaseInteractor::ReleaseInstance()
 
 int DataBaseInteractor::UserConnection(QString id, QString psw)
 {
+	bool IsById;
+	int l_id = id.toUInt( &IsById ) ;
+	QString query =	"SELECT * FROM User WHERE ";
 
-	QString query =	"SELECT user_right FROM User WHERE id_user='" + id + "' AND user_passeword='" + psw + "'";
+	if( IsById )
+	{
+		query += "id_user = " + QString::number(l_id) ;
+		//std::cout << id.toStdString() << " Is a id." << std::endl;
+	}
+	else
+	{
+		QStringList l_Name = id.split( "." ) ;
+		query += "user_lastname = '" + l_Name.at(0) + "' AND " ;
+		query += "user_firstname = '" + l_Name.at(1) + "'" ;
+		//std::cout << id.toStdString() << " Is a name." << std::endl;
+	}
+
+	query += " ;";
+
 	QSqlQuery response = DataBaseInteractor::Instance()->m_DataBase.exec(query);
 
-	if(response.next())
-		return response.value(0).toInt() - SecurityTagGuest;
+	int id_field		= response.record().indexOf("id_user");
+	int firstName_field = response.record().indexOf("user_firstname");
+	int lastName_field	= response.record().indexOf("user_lastname");
+	int groupRef_field	= response.record().indexOf("user_group");
+	int rightRef_field	= response.record().indexOf("user_right");
+	int desc_field		= response.record().indexOf("user_description");
+	int password_field	= response.record().indexOf("user_passeword");
 
-	return -1;
+	while( response.next() )
+	{
+		std::cout << " User Found." << std::endl ;
+		QString l_mdp = response.value(password_field).toString() ;
+		if( l_mdp == psw )
+		{
+			unsigned int l_user_group_ref = response.value(groupRef_field).toUInt();
+			QPair<unsigned int,QString> group(l_user_group_ref,QString::number(l_user_group_ref));
+
+			unsigned int l_user_rigth_ref = response.value(rightRef_field).toUInt();
+			QPair<unsigned int,QString> right(l_user_rigth_ref,QString::number(l_user_rigth_ref));
+
+			m_CurrentUser = Users(	response.value(id_field).toUInt(),
+									response.value(firstName_field).toString(),
+									response.value(lastName_field).toString(),
+									group,
+									right,
+									l_mdp,
+									response.value(desc_field).toString() ) ;
+			std::cout << " Password is ok for the user :" << m_CurrentUser.GetLastName().toStdString() << "  " << m_CurrentUser.GetFirstName().toStdString() << std::endl;
+			return m_UsersRightMap[l_user_rigth_ref] ;
+		}
+	}
+	std::cout << m_DataBase.lastError().text().toStdString() << std::endl ;
+
+	return ERROR_NO_RIGHT;
 }
 
 bool DataBaseInteractor::FileResearch(unsigned int idPatient, unsigned int idFile, unsigned int idAuthor)
@@ -189,6 +264,7 @@ bool DataBaseInteractor::FileResearch(unsigned int idPatient, unsigned int idFil
 								 )) ;
 									
 	}
+	std::cout << m_DataBase.lastError().text().toStdString() << std::endl ;
 
 	// for debug
 	std::cout << l_Result.size() << " files found!" << std::endl ;
@@ -198,8 +274,6 @@ bool DataBaseInteractor::FileResearch(unsigned int idPatient, unsigned int idFil
 		std::cout << " + File : " << (*aIt).GetId() << std::endl ;
 		std::cout << " ---> with the path : " << (*aIt).GetURL().toStdString() << std::endl ;
 	}
-
-	std::cout << m_DataBase.lastError().text().toStdString() << std::endl ;
 
 	if( l_Result.size() > 0 )
 		return true;
@@ -245,7 +319,7 @@ bool DataBaseInteractor::UserResearch(unsigned int idUser, QString LastName, QSt
 	int groupRef_field	= l_Query.record().indexOf("user_group");
 	int rightRef_field	= l_Query.record().indexOf("user_right");
 	int desc_field		= l_Query.record().indexOf("user_description");
-	int password_field	= l_Query.record().indexOf("user_password");
+	int password_field	= l_Query.record().indexOf("user_passeword");
 
 	while( l_Query.next() )
 	{
@@ -260,6 +334,7 @@ bool DataBaseInteractor::UserResearch(unsigned int idUser, QString LastName, QSt
 									l_Query.value(desc_field).toString() ) ) ;
 									
 	}
+	std::cout << m_DataBase.lastError().text().toStdString() << std::endl ;
 
 	//for debug
 	std::cout << l_Result.size() << " User found!" << std::endl ;

@@ -44,15 +44,15 @@ TechmedDB::~TechmedDB()
 //////////////////////////////////////////////////
 void TechmedDB::ConnectAsUser(int user)
 {
-	ui.pushButton_gettag->setVisible(user > 0);
-	ui.pushButton_getuser->setVisible(user > 0);
-	ui.label_set->setVisible(user > 0);
-	ui.pushButton_setfile->setVisible(user > 0);
-	ui.pushButton_settag->setVisible(user > 0);
-	ui.pushButton_setuser->setVisible(user > 1);
-	ui.line->setVisible(user > 0);
-	ui.line_2->setVisible(user > 0);	
-	ui.pushButton_changepassword->setVisible(user > 0);
+	ui.pushButton_gettag->setVisible(user >= STANDAR_USER);
+	ui.pushButton_getuser->setVisible(user >= STANDAR_USER);
+	ui.label_set->setVisible(user >= STANDAR_USER);
+	ui.pushButton_setfile->setVisible(user >= STANDAR_USER);
+	ui.pushButton_settag->setVisible(user >= STANDAR_USER);
+	ui.pushButton_setuser->setVisible(user >= ADMINISTRATOR_USER);
+	ui.line->setVisible(user >= STANDAR_USER);
+	ui.line_2->setVisible(user >= STANDAR_USER);	
+	ui.pushButton_changepassword->setVisible(user >= STANDAR_USER);
 }
 
 
@@ -76,7 +76,7 @@ void TechmedDB::ConnectionbuttonClicked()
 		result = DataBaseInteractor::Instance()->UserConnection(m_connectionDialog->GetConnectionId(), m_connectionDialog->GetConnectionPassword());
 		std::cout << result << std::endl;
 
-		if(result == -1)
+		if(result == ERROR_NO_RIGHT)
 			continue;
 
 		isConnected = true;
