@@ -288,7 +288,7 @@ bool DataBaseInteractor::UserResearch(unsigned int idUser, QString LastName, QSt
 	bool l_NeedInc = false ;
 	if( idUser > 0 )
 	{
-		l_QueryStr+= " WHERE id_user = " + QString::number(idUser) ;
+		l_QueryStr+= " WHERE id_user = '" + QString::number(idUser) + "'" ;
 		l_NeedInc = true ;
 	}
 	if( !FirstName.isEmpty() )
@@ -297,18 +297,18 @@ bool DataBaseInteractor::UserResearch(unsigned int idUser, QString LastName, QSt
 			l_QueryStr+= " AND " ;
 		else
 			l_QueryStr+=" WHERE " ;
-		l_QueryStr+="user_firstname = " + FirstName ;
+		l_QueryStr+="user_firstname = '" + FirstName + "'" ;
 	}
-	if( !FirstName.isEmpty() )
+	if( !LastName.isEmpty() )
 	{
 		if( l_NeedInc )
 			l_QueryStr+= " AND " ;
 		else
 			l_QueryStr+=" WHERE " ;
-		l_QueryStr+="user_lastname = " + LastName ;
+		l_QueryStr+="user_lastname = '" + LastName + "'" ;
 	}
-	l_QueryStr += " ;";
-	
+	l_QueryStr+=";";
+
 	QSqlQuery l_Query = m_DataBase.exec(l_QueryStr);
 
 	QVector<Users> l_Result ;

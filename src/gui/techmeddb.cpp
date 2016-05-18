@@ -2,6 +2,7 @@
 
 #include "../db/DataBaseInteractor.h"
 
+#include <qmessagebox.h>
 
 #include <iostream>
 
@@ -133,6 +134,14 @@ void TechmedDB::GetUserButtonClicked()
 	m_getuserDialog->Reset();
 	m_getuserDialog->exec();
 
+	if(!m_getuserDialog->HasBeenStarted())
+		return;
+
+	// request
+	DataBaseInteractor::Instance()->UserResearch(
+		((m_getuserDialog->IsIDChecked())?m_getuserDialog->GetID():0),
+		((m_getuserDialog->IsLastNameChecked())?m_getuserDialog->GetLastName():""),
+		((m_getuserDialog->IsFirstNameChecked())?m_getuserDialog->GetFirstName():""));
 
 }
 
