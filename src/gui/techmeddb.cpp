@@ -21,6 +21,7 @@ TechmedDB::TechmedDB(QWidget *parent, Qt::WFlags flags)
 	m_connectionDialog = new connectionDialog(this);
 	ConnectionbuttonClicked();
 	m_getfileDialog = new getfiledialog(this);
+	m_getuserDialog = new getuserdialog(this);
 	m_passwordManager = new PasswordManager(this);
 	
 	connect(ui.actionConnect, SIGNAL(triggered()), this, SLOT(ConnectionbuttonClicked()));
@@ -128,6 +129,10 @@ void TechmedDB::GetFileButtonClicked()
 
 void TechmedDB::GetUserButtonClicked()
 {
+	
+	m_getuserDialog->Reset();
+	m_getuserDialog->exec();
+
 
 }
 
