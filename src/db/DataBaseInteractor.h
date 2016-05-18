@@ -14,6 +14,7 @@
 #include "TDB_DLL_Export.h"
 
 #include "Files.h"
+#include "Users.h"
 
 enum RightAccess
 {
@@ -62,11 +63,8 @@ public:
 	int UserConnection(QString id, QString psw);
 
 	// Querry
-	void FileResearch(
-		unsigned int idPatient = -1,
-		unsigned int idFile = -1,
-		unsigned int idAuthor = -1
-		);
+	bool FileResearch(unsigned int idPatient = 0, unsigned int idFile = 0, unsigned int idAuthor = 0 );
+	bool UserResearch(unsigned int idUser = 0, QString LastName = QString::null, QString FirstName = QString::null );
 
 };
 

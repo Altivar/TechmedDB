@@ -122,7 +122,7 @@ int DataBaseInteractor::UserConnection(QString id, QString psw)
 	return -1;
 }
 
-void DataBaseInteractor::FileResearch(unsigned int idPatient, unsigned int idFile, unsigned int idAuthor)
+bool DataBaseInteractor::FileResearch(unsigned int idPatient, unsigned int idFile, unsigned int idAuthor)
 {
 
 	QString l_QueryStr( "SELECT * FROM File ") ;
@@ -200,4 +200,78 @@ void DataBaseInteractor::FileResearch(unsigned int idPatient, unsigned int idFil
 	}
 
 	std::cout << m_DataBase.lastError().text().toStdString() << std::endl ;
+
+	if( l_Result.size() > 0 )
+		return true;
+	else 
+		return false;
+}
+
+bool DataBaseInteractor::UserResearch(unsigned int idUser, QString LastName, QString FirstName )
+{
+	QString l_QueryStr( "SELECT * FROM User" );
+
+	bool l_NeedInc = false ;
+	if( idUser > 0 )
+	{
+		l_QueryStr+= " WHERE id_user = " + QString::number(idUser) ;
+		l_NeedInc = true ;
+	}
+	if( !FirstName.isEmpty() )
+	{
+		if( l_NeedInc )
+			l_QueryStr+= " AND " ;
+		else
+			l_QueryStr+=" WHERE " ;
+		l_QueryStr+="user_firstname = " + FirstName ;
+	}
+	if( !FirstName.isEmpty() )
+	{
+		if( l_NeedInc )
+			l_QueryStr+= " AND " ;
+		else
+			l_QueryStr+=" WHERE " ;
+		l_QueryStr+="user_lastname = " + LastName ;
+	}
+	l_QueryStr += " ;";
+	
+	QSqlQuery l_Query = m_DataBase.exec(l_QueryStr);
+
+	QVector<Users> l_Result ;
+
+	int id_field		= l_Query.record().indexOf("id_user");
+	int firstName_field = l_Query.record().indexOf("user_firstname");
+	int lastName_field	= l_Query.record().indexOf("user_lastname");
+	int groupRef_field	= l_Query.record().indexOf("user_group");
+	int rightRef_field	= l_Query.record().indexOf("user_right");
+	int desc_field		= l_Query.record().indexOf("user_description");
+	int password_field	= l_Query.record().indexOf("user_password");
+
+	while( l_Query.next() )
+	{
+		QPair<unsigned int,QString> group(l_Query.value(groupRef_field).toUInt(),l_Query.value(groupRef_field).toString());
+		QPair<unsigned int,QString> right(l_Query.value(rightRef_field).toUInt(),l_Query.value(rightRef_field).toString());
+		l_Result.push_back( Users(	l_Query.value(id_field).toUInt(),
+									l_Query.value(firstName_field).toString(),
+									l_Query.value(lastName_field).toString(),
+									group,
+									right,
+									l_Query.value(password_field).toString(),
+									l_Query.value(desc_field).toString() ) ) ;
+									
+	}
+
+	//for debug
+	std::cout << l_Result.size() << " User found!" << std::endl ;
+	QVector<Users>::iterator aIt = l_Result.begin();
+	for(aIt; aIt != l_Result.end(); aIt++)
+	{
+		std::cout << " + User : " << (*aIt).GetUserId() << std::endl ;
+		std::cout << " ---> " << (*aIt).GetLastName().toStdString() << "  " << (*aIt).GetFirstName().toStdString() << std::endl ;
+	}
+	
+	if( l_Result.size() > 0 )
+		return true;
+	else 
+		return false;
 }
