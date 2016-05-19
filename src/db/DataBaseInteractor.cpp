@@ -66,7 +66,7 @@ bool DataBaseInteractor::ConnectDataBase()
 			m_UsersRightMap[l_Query.value(id_Tag_field).toUInt()]=GUEST_USER;
 			break ;
 		case 1: 
-			m_UsersRightMap[l_Query.value(id_Tag_field).toUInt()]=STANDAR_USER;
+			m_UsersRightMap[l_Query.value(id_Tag_field).toUInt()]=STANDARD_USER;
 			break ;
 		case 2:
 			m_UsersRightMap[l_Query.value(id_Tag_field).toUInt()]=ADMINISTRATOR_USER;
@@ -379,9 +379,37 @@ bool DataBaseInteractor::UserResearch(unsigned int idUser, QString LastName, QSt
 		return false;
 }
 
-int DataBaseInteractor::GetIdByTag(QString tag)
+unsigned int DataBaseInteractor::GetIdByTag(QString tag)
 {
-	return 0;
+
+	QString l_QueryStr( "SELECT id_tag, tag_reference FROM Tag" );
+
+	if( !tag.isEmpty() )
+	{
+		l_QueryStr+= " WHERE tag_name = '" + tag + "'" ;
+	}
+	l_QueryStr+=";";
+
+	QSqlQuery l_Query = m_DataBase.exec(l_QueryStr);
+
+	int ref_field	= l_Query.record().indexOf("tag_reference");
+	int id_field	= l_Query.record().indexOf("id_tag");
+
+	unsigned int reference, idTag;
+	if( l_Query.next() )
+	{
+		idTag = l_Query.value(id_field).toUInt();
+		reference = l_Query.value(ref_field).toUInt();
+	}
+	else
+	{
+		std::cout << "Error : tag not found !" << std::endl ;
+		return 0;
+	}
+	std::cout << m_DataBase.lastError().text().toStdString() << std::endl ;
+
+	return reference > 0 ? reference : idTag ;
+
 }
 
 QStringList DataBaseInteractor::GetTagById(unsigned int idTag)
@@ -403,10 +431,6 @@ QStringList DataBaseInteractor::GetTagById(unsigned int idTag)
 	unsigned int reference;
 	if( l_Query.next() )
 	{
-		/*l_Result.push_back( Tag(	l_Query.value(id_field).toUInt(),
-									l_Query.value(name_field).toString(),
-									l_Query.value(type_field).toUInt(),
-									l_Query.value(ref_field).toUInt() ) ) ;*/
 		reference = l_Query.value(ref_field).toUInt();
 	}
 	std::cout << m_DataBase.lastError().text().toStdString() << std::endl ;

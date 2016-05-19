@@ -46,15 +46,15 @@ TechmedDB::~TechmedDB()
 //////////////////////////////////////////////////
 void TechmedDB::ConnectAsUser(int user)
 {
-	ui.pushButton_gettag->setVisible(user >= STANDAR_USER);
-	ui.pushButton_getuser->setVisible(user >= STANDAR_USER);
-	ui.label_set->setVisible(user >= STANDAR_USER);
-	ui.pushButton_setfile->setVisible(user >= STANDAR_USER);
-	ui.pushButton_settag->setVisible(user >= STANDAR_USER);
+	ui.pushButton_gettag->setVisible(user >= STANDARD_USER);
+	ui.pushButton_getuser->setVisible(user >= STANDARD_USER);
+	ui.label_set->setVisible(user >= STANDARD_USER);
+	ui.pushButton_setfile->setVisible(user >= STANDARD_USER);
+	ui.pushButton_settag->setVisible(user >= STANDARD_USER);
 	ui.pushButton_setuser->setVisible(user >= ADMINISTRATOR_USER);
-	ui.line->setVisible(user >= STANDAR_USER);
-	ui.line_2->setVisible(user >= STANDAR_USER);	
-	ui.pushButton_changepassword->setVisible(user >= STANDAR_USER);
+	ui.line->setVisible(user >= STANDARD_USER);
+	ui.line_2->setVisible(user >= STANDARD_USER);	
+	ui.pushButton_changepassword->setVisible(user >= STANDARD_USER);
 }
 
 
@@ -148,14 +148,17 @@ void TechmedDB::GetUserButtonClicked()
 void TechmedDB::GetTagButtonClicked()
 {
 
-	QStringList list = DataBaseInteractor::Instance()->GetTagById(2);
+	/*QStringList list = DataBaseInteractor::Instance()->GetTagById(2);
 
 	std::cout << "Tags found :" << std::endl;
 	for(int i = 0; i < list.size(); i++)
 	{
 		std::cout << list.at(i).toStdString() << std::endl;
-	}
+	}*/
 
+	unsigned int tagid = DataBaseInteractor::Instance()->GetIdByTag("XRay");
+
+	std::cout << "Id : " << tagid << std::endl;
 
 }
 
