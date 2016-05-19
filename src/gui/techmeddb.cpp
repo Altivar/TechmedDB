@@ -148,6 +148,15 @@ void TechmedDB::GetUserButtonClicked()
 void TechmedDB::GetTagButtonClicked()
 {
 
+	QStringList list = DataBaseInteractor::Instance()->GetTagById(2);
+
+	std::cout << "Tags found :" << std::endl;
+	for(int i = 0; i < list.size(); i++)
+	{
+		std::cout << list.at(i).toStdString() << std::endl;
+	}
+
+
 }
 
 void TechmedDB::ChangePasswordButtonClicked()

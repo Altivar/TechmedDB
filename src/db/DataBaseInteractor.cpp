@@ -1,6 +1,10 @@
 #include "DataBaseInteractor.h"
 
 
+#include "Tags.h"
+
+
+#include <qstringlist.h>
 
 static DataBaseInteractor* _instance = 0;
 
@@ -137,7 +141,6 @@ void DataBaseInteractor::ReleaseInstance()
 	_instance = 0;
 }
 
-
 int DataBaseInteractor::UserConnection(QString id, QString psw)
 {
 	bool IsById;
@@ -197,6 +200,10 @@ int DataBaseInteractor::UserConnection(QString id, QString psw)
 	return ERROR_NO_RIGHT;
 }
 
+
+//////////////////////////////////////////////////
+/////                QUERIES                 /////
+//////////////////////////////////////////////////
 bool DataBaseInteractor::FileResearch(unsigned int idPatient, unsigned int idFile, unsigned int idAuthor)
 {
 
@@ -350,3 +357,86 @@ bool DataBaseInteractor::UserResearch(unsigned int idUser, QString LastName, QSt
 	else 
 		return false;
 }
+
+int DataBaseInteractor::GetIdByTag(QString tag)
+{
+	return 0;
+}
+
+QStringList DataBaseInteractor::GetTagById(unsigned int idTag)
+{
+	QString l_QueryStr( "SELECT tag_reference FROM Tag" );
+
+	if( idTag > 0 )
+	{
+		l_QueryStr+= " WHERE id_tag = '" + QString::number(idTag) + "'" ;
+	}
+	l_QueryStr+=";";
+
+	QSqlQuery l_Query = m_DataBase.exec(l_QueryStr);
+
+	
+
+	int ref_field	= l_Query.record().indexOf("tag_reference");
+
+	unsigned int reference;
+	if( l_Query.next() )
+	{
+		/*l_Result.push_back( Tag(	l_Query.value(id_field).toUInt(),
+									l_Query.value(name_field).toString(),
+									l_Query.value(type_field).toUInt(),
+									l_Query.value(ref_field).toUInt() ) ) ;*/
+		reference = l_Query.value(ref_field).toUInt();
+	}
+	std::cout << m_DataBase.lastError().text().toStdString() << std::endl ;
+
+
+
+	l_QueryStr = "SELECT * FROM Tag";
+	if( reference > 0 )
+	{
+		l_QueryStr+= " WHERE id_tag = '" + QString::number(reference) + "' OR tag_reference = '" + QString::number(reference) + "'";
+	}
+	else
+	{
+		l_QueryStr+= " WHERE id_tag = '" + QString::number(idTag) + "' OR tag_reference = '" + QString::number(idTag) + "'";
+	}
+	l_QueryStr+=";";
+	l_Query = m_DataBase.exec(l_QueryStr);
+
+	int id_field		= l_Query.record().indexOf("id_tag");
+	int name_field = l_Query.record().indexOf("tag_name");
+	int type_field	= l_Query.record().indexOf("tag_type");
+	ref_field	= l_Query.record().indexOf("tag_reference");
+
+	QVector<Tag> l_Result ;
+	while( l_Query.next() )
+	{
+		l_Result.push_back( Tag(	l_Query.value(id_field).toUInt(),
+									l_Query.value(name_field).toString(),
+									l_Query.value(type_field).toUInt(),
+									l_Query.value(ref_field).toUInt() ) ) ;
+	}
+	std::cout << m_DataBase.lastError().text().toStdString() << std::endl ;
+
+
+
+
+
+	//for debug
+	std::cout << l_Result.size() << " tag(s) found!" << std::endl ;
+	QVector<Tag>::iterator aIt = l_Result.begin();
+	
+	
+	QStringList tagNames;
+	for(aIt; aIt != l_Result.end(); aIt++)
+	{
+		std::cout << " + Tag : " << (*aIt).GetId() << std::endl ;
+		std::cout << " ---> " << (*aIt).GetName().toStdString() << "  " << (*aIt).GetReference() << std::endl ;
+		tagNames.append((*aIt).GetName());
+	}
+	
+	return tagNames;
+
+}
+
