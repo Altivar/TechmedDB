@@ -112,22 +112,22 @@ Users::~Users()
 
 void Users::BuildUserTagsMap()
 {
-	QString l_QueryStr( "SELECT * FROM User_Tag WHERE user_id = " + QString::number(m_UserID) + " ;");
-	QSqlQuery l_Query = GetFromDB(l_QueryStr);	
+	//QString l_QueryStr( "SELECT * FROM User_Tag WHERE user_id = '" + QString::number(m_UserID) + "' ;");
+	//QSqlQuery l_Query = GetFromDB(l_QueryStr);	
 
-	int _id = l_Query.record().indexOf("id_user_tag");
-	int user_id = l_Query.record().indexOf("user_id");
-	int tag_id = l_Query.record().indexOf("tag_id");
+	//int _id = l_Query.record().indexOf("id_user_tag");
+	//int user_id = l_Query.record().indexOf("user_id");
+	//int tag_id = l_Query.record().indexOf("tag_id");
 
-	while( l_Query.next() )
-	{
-		unsigned int id_tagCurrent = l_Query.value(tag_id).toUInt();
+	//while( l_Query.next() )
+	//{
+	//	unsigned int id_tagCurrent = l_Query.value(tag_id).toUInt();
 
-		QString l_QueryStrTag( "SELECT tag_name FROM Tag WHERE id_tag = " + QString::number(id_tagCurrent) + " ;");
-		QSqlQuery l_QueryTag = GetFromDB(l_QueryStrTag);
-		int TagName = l_QueryTag.record().indexOf("tag_name");
-		l_QueryTag.first() ;
+	//	QString l_QueryStrTag( "SELECT tag_name FROM Tag WHERE id_tag = '" + QString::number(id_tagCurrent) + "' ;");
+	//	QSqlQuery l_QueryTag = GetFromDB(l_QueryStrTag);
+	//	int TagName = l_QueryTag.record().indexOf("tag_name");
+	//	l_QueryTag.first() ;
 
-		m_UserTags[id_tagCurrent] = l_QueryTag.value(TagName).toString() ;
-	}
+	//	m_UserTags[id_tagCurrent] = l_QueryTag.value(TagName).toString() ;
+	//}
 }

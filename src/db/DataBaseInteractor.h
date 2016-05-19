@@ -15,6 +15,7 @@
 
 #include "Files.h"
 #include "Users.h"
+#include "Tags.h"
 
 enum USER_RIGHT
 {
@@ -62,6 +63,7 @@ public:
 	
 	// get security level of user
 	int UserConnection(QString id, QString psw);
+	void UserChangePassword(QString oldPsw, QString NewPsw);
 
 	// Queries
 	bool FileResearch(unsigned int idPatient = 0, unsigned int idFile = 0, unsigned int idAuthor = 0 );
