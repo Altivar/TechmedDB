@@ -164,6 +164,7 @@ void TechmedDB::ChangePasswordButtonClicked()
 	m_passwordManager->Reset();
 	m_passwordManager->exec();
 
+	DataBaseInteractor::Instance()->UserChangePassword( m_passwordManager->GetCurrentPassword(), m_passwordManager->GetNewPassword() ) ;
 }
 
 

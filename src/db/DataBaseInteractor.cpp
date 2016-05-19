@@ -1,7 +1,6 @@
 #include "DataBaseInteractor.h"
 
 
-#include "Tags.h"
 
 
 #include <qstringlist.h>
@@ -221,7 +220,36 @@ int DataBaseInteractor::UserConnection(QString id, QString psw)
 	return ERROR_NO_RIGHT;
 }
 
+void DataBaseInteractor::UserChangePassword(QString oldPsw, QString NewPsw)
+{
+	if( m_CurrentUser.GetUserRightCode() >= STANDAR_USER )
+	{
+		QString query =	"SELECT user_passeword FROM User WHERE id_user = " + QString::number( m_CurrentUser.GetUserId() ) + " ;" ;
 
+		QSqlQuery response = DataBaseInteractor::Instance()->m_DataBase.exec(query);
+		int password_field	= response.record().indexOf("user_passeword");
+
+		if( response.next() )
+		{
+			QString l_mdp = response.value(password_field).toString() ;
+
+			if( l_mdp == oldPsw )
+			{
+				query = "UPDATE User SET user_passeword = '" + NewPsw + "' WHERE id_user = " + QString::number( m_CurrentUser.GetUserId() ) + " ;" ;
+				DataBaseInteractor::Instance()->m_DataBase.exec(query);
+			}
+			else
+			{				
+				std::cout << "Error, wrong current password." << std::endl ;
+			}
+		}
+		std::cout << m_DataBase.lastError().text().toStdString() << std::endl ;
+	}
+	else
+	{
+		std::cout << "You have not the right to change the password." << std::endl ;
+	}
+}
 //////////////////////////////////////////////////
 /////                QUERIES                 /////
 //////////////////////////////////////////////////
