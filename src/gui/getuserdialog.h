@@ -18,6 +18,13 @@ public:
 	bool HasBeenStarted() { return m_hasStarted; }
 	void Reset();
 
+	bool IsIDChecked() { return ui.checkBox_IdUser->isChecked(); }
+	bool IsLastNameChecked() { return ui.checkBox_lastName->isChecked(); }
+	bool IsFirstNameChecked() { return ui.checkBox_firstName->isChecked(); }
+
+	unsigned int GetID() { return ui.lineEdit_IdUser->text().toUInt(); }
+	QString GetLastName() { return ui.lineEdit_lastName->text(); }
+	QString GetFirstName() { return ui.lineEdit_firstName->text(); }
 
 public slots:
 	void OnStartButtonClicked();
