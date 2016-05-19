@@ -154,9 +154,30 @@ int DataBaseInteractor::UserConnection(QString id, QString psw)
 	}
 	else
 	{
-		QStringList l_Name = id.split( "." ) ;
-		query += "user_lastname = '" + l_Name.at(0) + "' AND " ;
-		query += "user_firstname = '" + l_Name.at(1) + "'" ;
+		// parse if a separator caracter is detected to split lastname and firstname
+		char l_separator = 33 ;
+		QStringList l_Name ;
+		l_Name = id.split( l_separator ) ;
+		while(l_Name.size() < 2 && l_separator < 65 )
+		{
+			l_Name = id.split( l_separator ) ; //
+			if( l_separator == 38 || l_separator == 44 )
+			{
+				l_separator += 2;
+			}
+			else
+				l_separator++ ;
+		}
+		if( l_Name.size() == 2 )
+		{
+			query += "user_lastname = '" + l_Name.at(0) + "' AND " ;
+			query += "user_firstname = '" + l_Name.at(1) + "'" ;
+		}
+		else
+		{
+			std::cout << "Invalid name format, check if you enter the lastname and the first name with a valid special caracter to separate them ( default use '.')." << std::endl ;
+			return ERROR_NO_RIGHT;
+		}
 		//std::cout << id.toStdString() << " Is a name." << std::endl;
 	}
 
