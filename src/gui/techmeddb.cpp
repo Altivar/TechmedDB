@@ -23,6 +23,7 @@ TechmedDB::TechmedDB(QWidget *parent, Qt::WFlags flags)
 	ConnectionbuttonClicked();
 	m_getfileDialog = new getfiledialog(this);
 	m_getuserDialog = new getuserdialog(this);
+	m_gettagDialog = new gettagdialog(this);
 	m_passwordManager = new PasswordManager(this);
 	
 	connect(ui.actionConnect, SIGNAL(triggered()), this, SLOT(ConnectionbuttonClicked()));
@@ -148,17 +149,26 @@ void TechmedDB::GetUserButtonClicked()
 void TechmedDB::GetTagButtonClicked()
 {
 
-	/*QStringList list = DataBaseInteractor::Instance()->GetTagById(2);
+	m_gettagDialog->Reset();
+	m_gettagDialog->exec();
 
-	std::cout << "Tags found :" << std::endl;
-	for(int i = 0; i < list.size(); i++)
+	bool ok;
+	unsigned int id = m_gettagDialog->GetTag().toUInt(&ok, 10);
+	if(ok)
 	{
-		std::cout << list.at(i).toStdString() << std::endl;
-	}*/
+		QStringList list = DataBaseInteractor::Instance()->GetTagById(id);
+		std::cout << "Tags found :" << std::endl;
+		for(int i = 0; i < list.size(); i++)
+		{
+			std::cout << list.at(i).toStdString() << std::endl;
+		}
+	}
+	else
+	{
+		unsigned int tagid = DataBaseInteractor::Instance()->GetIdByTag(m_gettagDialog->GetTag());
+		std::cout << "Id : " << tagid << std::endl;
+	}
 
-	unsigned int tagid = DataBaseInteractor::Instance()->GetIdByTag("XRay");
-
-	std::cout << "Id : " << tagid << std::endl;
 
 }
 

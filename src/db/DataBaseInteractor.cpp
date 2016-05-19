@@ -403,7 +403,7 @@ unsigned int DataBaseInteractor::GetIdByTag(QString tag)
 	}
 	else
 	{
-		std::cout << "Error : tag not found !" << std::endl ;
+		std::cout << std::endl << "Error : tag not found !" << std::endl ;
 		return 0;
 	}
 	std::cout << m_DataBase.lastError().text().toStdString() << std::endl ;
@@ -469,15 +469,10 @@ QStringList DataBaseInteractor::GetTagById(unsigned int idTag)
 
 
 	//for debug
-	std::cout << l_Result.size() << " tag(s) found!" << std::endl ;
 	QVector<Tag>::iterator aIt = l_Result.begin();
-	
-	
 	QStringList tagNames;
 	for(aIt; aIt != l_Result.end(); aIt++)
 	{
-		std::cout << " + Tag : " << (*aIt).GetId() << std::endl ;
-		std::cout << " ---> " << (*aIt).GetName().toStdString() << "  " << (*aIt).GetReference() << std::endl ;
 		tagNames.append((*aIt).GetName());
 	}
 	

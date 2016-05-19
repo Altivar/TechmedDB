@@ -7,6 +7,7 @@
 #include "connectiondialog.h"
 #include "getfiledialog.h"
 #include "getuserdialog.h"
+#include "gettagdialog.h"
 #include "PasswordManager.h"
 
 class TechmedDB : public QMainWindow
@@ -34,6 +35,7 @@ private:
 	connectionDialog* m_connectionDialog;
 	getfiledialog* m_getfileDialog;
 	getuserdialog* m_getuserDialog;
+	gettagdialog* m_gettagDialog;
 	PasswordManager* m_passwordManager;
 
 	bool m_isFreeVisit;
