@@ -1,7 +1,7 @@
 #include "DataBaseInteractor.h"
 
 
-
+#include <qmessagebox.h>
 
 #include <qstringlist.h>
 
@@ -222,7 +222,10 @@ int DataBaseInteractor::UserConnection(QString id, QString psw)
 
 void DataBaseInteractor::UserChangePassword(QString oldPsw, QString NewPsw)
 {
-	if( m_CurrentUser.GetUserRightCode() >= STANDAR_USER )
+	QMessageBox qmb;
+	qmb.setWindowTitle("Password");
+							
+	if( m_CurrentUser.GetUserRightCode() >= STANDARD_USER )
 	{
 		QString query =	"SELECT user_passeword FROM User WHERE id_user = " + QString::number( m_CurrentUser.GetUserId() ) + " ;" ;
 
@@ -237,18 +240,30 @@ void DataBaseInteractor::UserChangePassword(QString oldPsw, QString NewPsw)
 			{
 				query = "UPDATE User SET user_passeword = '" + NewPsw + "' WHERE id_user = " + QString::number( m_CurrentUser.GetUserId() ) + " ;" ;
 				DataBaseInteractor::Instance()->m_DataBase.exec(query);
+				
+				qmb.setText(QString("Password updated !"));
+				qmb.setIcon(QMessageBox::Icon::Information);
 			}
 			else
-			{				
-				std::cout << "Error, wrong current password." << std::endl ;
+			{		
+				qmb.setText(QString("Error, wrong current password."));
+				qmb.setIcon(QMessageBox::Icon::Warning);
 			}
+		}
+		else
+		{
+			qmb.setText(QString("Unable to update password."));
+			qmb.setIcon(QMessageBox::Icon::Warning);
 		}
 		std::cout << m_DataBase.lastError().text().toStdString() << std::endl ;
 	}
 	else
 	{
-		std::cout << "You have not the right to change the password." << std::endl ;
+		qmb.setText(QString("You have not the right to change the password."));
+		qmb.setIcon(QMessageBox::Icon::Warning);
 	}
+
+	qmb.exec();
 }
 //////////////////////////////////////////////////
 /////                QUERIES                 /////
