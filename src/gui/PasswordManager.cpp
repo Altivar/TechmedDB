@@ -24,6 +24,7 @@ PasswordManager::~PasswordManager(void)
 void PasswordManager::Reset()
 {
 	m_isValidated = false;
+	ui.label_content->setPixmap(QPixmap("./images/pascontent.png"));
 	ui.lineEdit_newPsw->clear();
 	ui.lineEdit_newPsw2->clear();
 	ui.lineEdit_currentPsw->clear();

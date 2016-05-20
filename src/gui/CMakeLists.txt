@@ -46,6 +46,17 @@ IF (${CMAKE_BUILD_TOOL} MATCHES "devenv")
   SET (TechmedDBSrcs ${TechmedDBSrcs} ${TechmedDBUI})
 ENDIF (${CMAKE_BUILD_TOOL} MATCHES "devenv")
 
+# copy resources next to exe
+file(COPY ${CMAKE_SOURCE_DIR}/src/gui/images DESTINATION ${PROJECT_BINARY_DIR}/src/gui/Debug)
+file(COPY ${CMAKE_SOURCE_DIR}/src/gui/images DESTINATION ${PROJECT_BINARY_DIR}/src/gui/Release)
+# copy resources for accessing from solution
+file(COPY ${CMAKE_SOURCE_DIR}/src/gui/images DESTINATION ${PROJECT_BINARY_DIR}/src/gui)
+# copy database next to exe
+file(COPY ${CMAKE_SOURCE_DIR}/src/db/TechmedDB.db DESTINATION ${PROJECT_BINARY_DIR}/src/gui/Debug)
+file(COPY ${CMAKE_SOURCE_DIR}/src/db/TechmedDB.db DESTINATION ${PROJECT_BINARY_DIR}/src/gui/Release)
+# copy database for accessing from solution
+file(COPY ${CMAKE_SOURCE_DIR}/src/db/TechmedDB.db DESTINATION ${PROJECT_BINARY_DIR}/src/gui)
+
 
 ADD_EXECUTABLE(TechMedDB MACOSX_BUNDLE ${TechmedDBSrcs} ${TDB_UISrcs} ${TDB_MOCSrcs} ${TDB_ResourceSrcs})
 #link_libraries(${VTK_LIBRARY_DIRS})

@@ -12,8 +12,8 @@ static DataBaseInteractor* _instance = 0;
 DataBaseInteractor::DataBaseInteractor()
 {
 	m_DataBaseFullName = "TechmedDB.db";
-	m_DataBasePath = ".\\..\\..\\..\\src\\db\\";
-
+	//m_DataBasePath = ".\\..\\..\\..\\src\\db\\";
+	m_DataBasePath = ".\\";
 
 	QString l_DataBaseFullPathName = m_DataBasePath+m_DataBaseFullName;
 	m_DataBase = QSqlDatabase::addDatabase("QSQLITE",l_DataBaseFullPathName);
