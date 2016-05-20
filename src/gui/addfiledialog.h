@@ -19,6 +19,8 @@ public:
 	void SetFolderIcon(QString path);
 	void SetFileIcon(QString path);
 
+	bool HasBenValidated() { return m_isValidated; }
+
 	unsigned int GetPatientId() { return m_patientId; }
 	QString GetFileOrFolderPath() { return ui.lineEdit_filePath->text(); }
 
@@ -32,7 +34,7 @@ private:
 
 	bool m_isValidated;
 
-	int m_patientId;
+	unsigned int m_patientId;
 
 };
 

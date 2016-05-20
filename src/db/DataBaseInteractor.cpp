@@ -4,6 +4,7 @@
 #include <qmessagebox.h>
 
 #include <qstringlist.h>
+#include <qdatetime.h>
 
 static DataBaseInteractor* _instance = 0;
 
@@ -551,4 +552,47 @@ QStringList DataBaseInteractor::GetTagById(unsigned int idTag)
 	return tagNames;
 
 }
+
+bool DataBaseInteractor::AddFile(QString filePath, unsigned int patientId)
+{
+	
+	QString l_QueryStr( "INSERT INTO File (file_url, file_author, file_patient, file_creation_date, file_last_modification_date, file_md5sum) VALUES ('") ;
+	
+	// file path
+	l_QueryStr += filePath;
+	l_QueryStr += "', '";
+	// author id
+	l_QueryStr += QString::number(m_CurrentUser.GetUserId());
+	l_QueryStr += "', '";
+	// patient id
+	l_QueryStr += QString::number(patientId);
+	l_QueryStr += "', '";
+	
+	
+	// compute correct date
+	QString date = QString::number(QDate::currentDate().day());
+	date += "-";
+	date += QString::number(QDate::currentDate().month());
+	date += "-";
+	date += QString::number(QDate::currentDate().year());
+
+	// creation date
+	l_QueryStr += date;
+	l_QueryStr += "', '";
+	// last modif date (creation date)
+	l_QueryStr += date;
+	l_QueryStr += "', '";
+	// md5sum
+	l_QueryStr += "AAAAA";
+	l_QueryStr += "');";
+
+	QSqlQuery l_Query = m_DataBase.exec(l_QueryStr);
+	
+	std::cout << m_DataBase.lastError().text().toStdString() << std::endl ;
+
+	return true;
+
+}
+
+
 

@@ -70,7 +70,7 @@ public:
 	bool UserResearch(unsigned int idUser = 0, QString LastName = QString::null, QString FirstName = QString::null );
 	unsigned int GetIdByTag(QString tag = QString::null);
 	QStringList GetTagById(unsigned int idTag = 0);
-
+	bool AddFile(QString filePath, unsigned int patientId);
 
 };
 

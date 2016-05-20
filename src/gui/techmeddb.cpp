@@ -190,5 +190,12 @@ void TechmedDB::AddFileButtonClicked()
 	m_addfileDialog->Reset();
 	m_addfileDialog->exec();
 
+	if(!m_addfileDialog->HasBenValidated())
+		return;
+
+	DataBaseInteractor::Instance()->AddFile(m_addfileDialog->GetFileOrFolderPath(), m_addfileDialog->GetPatientId());
+
+	QMessageBox::about(this, "Add file", "Data has been added to database");
 
 }
+

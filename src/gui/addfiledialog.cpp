@@ -51,7 +51,7 @@ void addfiledialog::OnOkButtonClicked()
 		return;
 	}
 	bool ok;
-	int id = ui.lineEdit_idPatient->text().toInt(&ok, 10);
+	unsigned int id = ui.lineEdit_idPatient->text().toUInt(&ok, 10);
 	if(!ok || id < 1)
 	{
 		QMessageBox::warning(this, "Add file", "The patient ID is not in the good format.");
