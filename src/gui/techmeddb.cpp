@@ -25,6 +25,9 @@ TechmedDB::TechmedDB(QWidget *parent, Qt::WFlags flags)
 	m_getuserDialog = new getuserdialog(this);
 	m_gettagDialog = new gettagdialog(this);
 	m_passwordManager = new PasswordManager(this);
+	m_addfileDialog = new addfiledialog(this);
+	m_addfileDialog->SetFolderIcon("./images/folder.png");
+	m_addfileDialog->SetFileIcon("./images/file.png");
 	
 	connect(ui.actionConnect, SIGNAL(triggered()), this, SLOT(ConnectionbuttonClicked()));
 	connect(ui.actionClose, SIGNAL(triggered()), this, SLOT(close()));
@@ -33,6 +36,7 @@ TechmedDB::TechmedDB(QWidget *parent, Qt::WFlags flags)
 	connect(ui.pushButton_getuser, SIGNAL(clicked()), this, SLOT(GetUserButtonClicked()));
 	connect(ui.pushButton_gettag, SIGNAL(clicked()), this, SLOT(GetTagButtonClicked()));
 	connect(ui.pushButton_changepassword, SIGNAL(clicked()), this, SLOT(ChangePasswordButtonClicked()));
+	connect(ui.pushButton_setfile, SIGNAL(clicked()), this, SLOT(AddFileButtonClicked()));
 }
 
 TechmedDB::~TechmedDB()
@@ -181,4 +185,10 @@ void TechmedDB::ChangePasswordButtonClicked()
 	DataBaseInteractor::Instance()->UserChangePassword( m_passwordManager->GetCurrentPassword(), m_passwordManager->GetNewPassword() ) ;
 }
 
+void TechmedDB::AddFileButtonClicked()
+{
+	m_addfileDialog->Reset();
+	m_addfileDialog->exec();
 
+
+}

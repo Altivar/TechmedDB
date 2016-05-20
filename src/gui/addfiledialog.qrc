@@ -1,0 +1,6 @@
+<RCC>
+    <qresource prefix="addfileDialog">
+		<file>images/folder.png</file>
+		<file>images/file.png</file>
+    </qresource>
+</RCC>

@@ -9,6 +9,7 @@
 #include "getuserdialog.h"
 #include "gettagdialog.h"
 #include "PasswordManager.h"
+#include "addfiledialog.h"
 
 class TechmedDB : public QMainWindow
 {
@@ -26,6 +27,8 @@ public slots:
 	void GetUserButtonClicked();
 	void GetTagButtonClicked();
 	void ChangePasswordButtonClicked();
+	void AddFileButtonClicked();
+
 
 private:
 	void ConnectAsUser(int user);
@@ -37,6 +40,8 @@ private:
 	getuserdialog* m_getuserDialog;
 	gettagdialog* m_gettagDialog;
 	PasswordManager* m_passwordManager;
+	addfiledialog* m_addfileDialog;
+
 
 	bool m_isFreeVisit;
 
