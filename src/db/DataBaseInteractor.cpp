@@ -275,15 +275,20 @@ bool DataBaseInteractor::FileResearch(const QStringList& tagList, unsigned int i
 	std::vector<int> tagRef;
 	if(!tagList.empty())
 	{
-		l_QueryStr += "NATURAL JOIN File_Tag ";
 		for(int i = 0; i < tagList.size(); i++)
 		{
 			int ref = GetIdByTag(tagList.at(i));
 			if(ref <= 0)
+			{
+				std::cout << "Unknown tag \"" << tagList.at(i).toStdString() << "\" : ignored " << std::endl;
 				continue;
+			}
 			tagRef.push_back(ref);
 		}
 	}
+	if(!tagRef.empty())
+		l_QueryStr += "NATURAL JOIN File_Tag ";
+		
 	bool l_NeedInc = false ;
 
 	if( idFile != 0 )
@@ -348,7 +353,6 @@ bool DataBaseInteractor::FileResearch(const QStringList& tagList, unsigned int i
 
 	while( l_Query.next() )
 	{
-		std::cout << "File(s) founded !" << std::endl ;
 		l_Result.push_back( Files(	l_Query.value(id_file_field).toUInt(),
 									l_Query.value(url_field).toString(),
 									l_Query.value(sourcefile_field).toUInt(),
