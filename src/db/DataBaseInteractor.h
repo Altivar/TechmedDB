@@ -66,7 +66,7 @@ public:
 	void UserChangePassword(QString oldPsw, QString NewPsw);
 
 	// Queries
-	bool FileResearch(unsigned int idPatient = 0, unsigned int idFile = 0, unsigned int idAuthor = 0 );
+	bool FileResearch(const QStringList& tagList, unsigned int idPatient = 0, unsigned int idFile = 0, unsigned int idAuthor = 0);
 	bool UserResearch(unsigned int idUser = 0, QString LastName = QString::null, QString FirstName = QString::null );
 	unsigned int GetIdByTag(QString tag = QString::null);
 	QStringList GetTagById(unsigned int idTag = 0);

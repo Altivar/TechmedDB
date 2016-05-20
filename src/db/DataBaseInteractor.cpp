@@ -268,15 +268,27 @@ void DataBaseInteractor::UserChangePassword(QString oldPsw, QString NewPsw)
 //////////////////////////////////////////////////
 /////                QUERIES                 /////
 //////////////////////////////////////////////////
-bool DataBaseInteractor::FileResearch(unsigned int idPatient, unsigned int idFile, unsigned int idAuthor)
+bool DataBaseInteractor::FileResearch(const QStringList& tagList, unsigned int idPatient, unsigned int idFile, unsigned int idAuthor)
 {
 
-	QString l_QueryStr( "SELECT * FROM File ") ;
+	QString l_QueryStr( "SELECT File.* FROM File ") ;
+	std::vector<int> tagRef;
+	if(!tagList.empty())
+	{
+		l_QueryStr += "NATURAL JOIN File_Tag ";
+		for(int i = 0; i < tagList.size(); i++)
+		{
+			int ref = GetIdByTag(tagList.at(i));
+			if(ref <= 0)
+				continue;
+			tagRef.push_back(ref);
+		}
+	}
 	bool l_NeedInc = false ;
 
 	if( idFile != 0 )
 	{
-		l_QueryStr += "WHERE id_File = " + QString::number(idFile) ;
+		l_QueryStr += "WHERE id_File = '" + QString::number(idFile) + "'" ;
 		l_NeedInc = true;
 	}
 	if( idPatient != 0)
@@ -290,7 +302,7 @@ bool DataBaseInteractor::FileResearch(unsigned int idPatient, unsigned int idFil
 		{
 			l_QueryStr += "WHERE " ;
 		}
-		l_QueryStr += "file_patient = " + QString::number(idPatient) ;
+		l_QueryStr += "file_patient = '" + QString::number(idPatient) + "'" ;
 		l_NeedInc = true;
 	} 
 	if( idAuthor != 0)
@@ -298,14 +310,27 @@ bool DataBaseInteractor::FileResearch(unsigned int idPatient, unsigned int idFil
 		if( l_NeedInc )
 		{
 			l_QueryStr+= " AND " ;
-			l_NeedInc = false ;
-		}else
+		}
+		else
 		{
 			l_QueryStr += "WHERE " ;
 		}
-		l_QueryStr += "file_author = " + QString::number(idAuthor) ;
+		l_QueryStr += "file_author = '" + QString::number(idAuthor) + "'" ;
 		l_NeedInc = true;
 	}
+	for(int i = 0; i < tagRef.size(); i++)
+	{
+		if( l_NeedInc )
+		{
+			l_QueryStr+= " AND " ;
+		}
+		else
+		{
+			l_QueryStr += "WHERE " ;
+		}
+		l_QueryStr += "File_Tag.id_tag = '" + QString::number(tagRef.at(i)) + "'" ;
+	}
+	
 	l_QueryStr+= " ;";
 	QSqlQuery l_Query = m_DataBase.exec(l_QueryStr);
 

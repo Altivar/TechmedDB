@@ -22,7 +22,11 @@ void getfiledialog::ResetFileDialog()
 
 QStringList getfiledialog::GetTags()
 {
+	
 	QStringList list;
+	if(!IsFileTagActive())
+		return list;
+	
 	if(!ui.lineEdit_Tag1->text().trimmed().isEmpty())
 		list.append(ui.lineEdit_Tag1->text().trimmed());
 	if(!ui.lineEdit_Tag2->text().trimmed().isEmpty())

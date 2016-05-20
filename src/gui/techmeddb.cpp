@@ -121,6 +121,7 @@ void TechmedDB::GetFileButtonClicked()
 		return;
 
 	DataBaseInteractor::Instance()->FileResearch(
+		m_getfileDialog->GetTags(),
 		((m_getfileDialog->IsPatientIDActive())?m_getfileDialog->GetPatientID():0),
 		((m_getfileDialog->IsFileIDActive())?m_getfileDialog->GetFileID():0),
 		((m_getfileDialog->IsAuthorIDActive())?m_getfileDialog->GetAuthorID():0));
