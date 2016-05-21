@@ -14,15 +14,23 @@
    <string>TechmedDB</string>
   </property>
   <widget class="QWidget" name="centralWidget">
-   <widget class="QTableView" name="QueryView">
+   <widget class="QWidget" name="gridLayoutWidget">
     <property name="geometry">
      <rect>
-      <x>10</x>
-      <y>0</y>
+      <x>0</x>
+      <y>10</y>
       <width>411</width>
-      <height>341</height>
+      <height>331</height>
      </rect>
     </property>
+    <layout class="QGridLayout" name="gridLayoutQueryView">
+     <property name="sizeConstraint">
+      <enum>QLayout::SetMaximumSize</enum>
+     </property>
+     <item row="0" column="0">
+      <widget class="QTableView" name="QueryView"/>
+     </item>
+    </layout>
    </widget>
   </widget>
   <widget class="QMenuBar" name="menuBar">

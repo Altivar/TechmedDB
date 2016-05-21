@@ -3,6 +3,7 @@
 #include "../db/DataBaseInteractor.h"
 
 #include <qmessagebox.h>
+#include <qsizepolicy.h>
 
 #include <iostream>
 
@@ -14,8 +15,7 @@ TechmedDB::TechmedDB(QWidget *parent, Qt::WFlags flags)
 		
 	DataBaseInteractor::Instance()->ConnectDataBase();
 	ui.setupUi(this);
-
-
+	
 	m_isFreeVisit = false;
 
 
@@ -124,11 +124,17 @@ void TechmedDB::GetFileButtonClicked()
 	if(m_getfileDialog->HasExit())
 		return;
 
-	DataBaseInteractor::Instance()->FileResearch(
-		m_getfileDialog->GetTags(),
-		((m_getfileDialog->IsPatientIDActive())?m_getfileDialog->GetPatientID():0),
-		((m_getfileDialog->IsFileIDActive())?m_getfileDialog->GetFileID():0),
-		((m_getfileDialog->IsAuthorIDActive())?m_getfileDialog->GetAuthorID():0));
+	if( DataBaseInteractor::Instance()->FileResearch(	m_getfileDialog->GetTags(),
+														((m_getfileDialog->IsPatientIDActive())?m_getfileDialog->GetPatientID():0),
+														((m_getfileDialog->IsFileIDActive())?m_getfileDialog->GetFileID():0),
+														((m_getfileDialog->IsAuthorIDActive())?m_getfileDialog->GetAuthorID():0)) )
+	{
+		ui.QueryView->setModel( DataBaseInteractor::Instance()->GetItemModel() ) ;
+		ui.QueryView->resizeColumnsToContents();
+		ui.QueryView->setEditTriggers( QAbstractItemView::NoEditTriggers ) ;
+		ui.QueryView->update() ;
+		ui.QueryView->show() ;
+	}
 
 
 

@@ -243,25 +243,25 @@ void DataBaseInteractor::UserChangePassword(QString oldPsw, QString NewPsw)
 				DataBaseInteractor::Instance()->m_DataBase.exec(query);
 				
 				qmb.setText(QString("Password updated !"));
-				qmb.setIcon(QMessageBox::Icon::Information);
+				qmb.setIcon(QMessageBox::Information);
 			}
 			else
 			{		
 				qmb.setText(QString("Error, wrong current password."));
-				qmb.setIcon(QMessageBox::Icon::Warning);
+				qmb.setIcon(QMessageBox::Warning);
 			}
 		}
 		else
 		{
 			qmb.setText(QString("Unable to update password."));
-			qmb.setIcon(QMessageBox::Icon::Warning);
+			qmb.setIcon(QMessageBox::Warning);
 		}
 		std::cout << m_DataBase.lastError().text().toStdString() << std::endl ;
 	}
 	else
 	{
 		qmb.setText(QString("You have not the right to change the password."));
-		qmb.setIcon(QMessageBox::Icon::Warning);
+		qmb.setIcon(QMessageBox::Warning);
 	}
 
 	qmb.exec();
@@ -324,7 +324,7 @@ bool DataBaseInteractor::FileResearch(const QStringList& tagList, unsigned int i
 		l_QueryStr += "file_author = '" + QString::number(idAuthor) + "'" ;
 		l_NeedInc = true;
 	}
-	for(int i = 0; i < tagRef.size(); i++)
+	for(unsigned int i = 0; i < tagRef.size(); i++)
 	{
 		if( l_NeedInc )
 		{
@@ -369,11 +369,46 @@ bool DataBaseInteractor::FileResearch(const QStringList& tagList, unsigned int i
 
 	// for debug
 	std::cout << l_Result.size() << " files found!" << std::endl ;
-	QVector<Files>::iterator aIt = l_Result.begin();
-	for(aIt; aIt != l_Result.end(); aIt++)
+
+	m_ItemModel = new QStandardItemModel(l_Result.size(), 8);
+	QStringList Titles;
+	Titles << "id_File" << "file's url" << " original source file" << "Author id" << "Patient id" << "Creation date" << "Last modification date" << "MD5Sum" ;
+	m_ItemModel->setHorizontalHeaderLabels(Titles) ;
+	int i = 0;
+	for(QVector<Files>::iterator aIt = l_Result.begin(); aIt != l_Result.end(); aIt++, ++i)
 	{
-		std::cout << " + File : " << (*aIt).GetId() << std::endl ;
-		std::cout << " ---> with the path : " << (*aIt).GetURL().toStdString() << std::endl ;
+		QStandardItem *itemId=new QStandardItem;
+		QStandardItem *itemURL=new QStandardItem;
+		QStandardItem *itemSrc=new QStandardItem;
+		QStandardItem *itemAuthor=new QStandardItem;
+		QStandardItem *itemPatient=new QStandardItem;
+		QStandardItem *itemCreation=new QStandardItem;
+		QStandardItem *itemModification=new QStandardItem;
+		QStandardItem *itemMd5Sum=new QStandardItem;
+		
+		itemId->setText(QString::number((*aIt).GetId()));
+		m_ItemModel->setItem(i, 0, itemId);
+		
+		itemURL->setText((*aIt).GetURL());
+		m_ItemModel->setItem(i, 1, itemURL);
+
+		itemSrc->setText(QString::number((*aIt).GetSourceFile()));
+		m_ItemModel->setItem(i, 2, itemSrc);
+
+		itemAuthor->setText(QString::number((*aIt).GetAuthorId()));
+		m_ItemModel->setItem(i, 3, itemAuthor);
+
+		itemPatient->setText(QString::number((*aIt).GetPatientId()));
+		m_ItemModel->setItem(i, 4, itemPatient);
+
+		itemCreation->setText((*aIt).GetFileCreationDate());
+		m_ItemModel->setItem(i, 5, itemCreation);
+
+		itemModification->setText((*aIt).GetFileLastModificationDate());
+		m_ItemModel->setItem(i, 6, itemModification);
+
+		itemMd5Sum->setText((*aIt).GetFileMD5Sum());
+		m_ItemModel->setItem(i, 7, itemMd5Sum);
 	}
 
 	if( l_Result.size() > 0 )
