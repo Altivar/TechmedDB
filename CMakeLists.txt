@@ -8,6 +8,10 @@ INCLUDE(${QT_USE_FILE})
 # Use the include path and library for Qt that is used by VTK.
 INCLUDE_DIRECTORIES(${QT_INCLUDE_DIR} ${QT_QTGUI_INCLUDE_DIR} ${QT_QTCORE_INCLUDE_DIR} ${QT_QTXML_INCLUDE_DIR})
 
+file(MAKE_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}/License)
+file(	COPY ${CMAKE_CURRENT_SOURCE_DIR}/gpl_3_0.txt
+        DESTINATION ${CMAKE_CURRENT_BINARY_DIR}/License )
+		
 # recursive call
 ADD_SUBDIRECTORY(src)
 

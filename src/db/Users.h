@@ -54,7 +54,9 @@ public:
 	unsigned int GetUserId(){ return m_UserID;}
 	QString GetFirstName(){ return m_UserFirstName;}
 	QString GetLastName(){ return m_UserLastName;}
+	QString GetUserDescription(){ return m_UserDescription;}
 	unsigned int GetUserRightCode(){ return m_UserRightRefAndName.first;}
+	unsigned int GetUserGroupId(){ return m_UserGroupRefAndName.first;}
 	QMap<unsigned int,QString> GetUserTags() { return m_UserTags; }
 
 	/*QVector<Users> GetUserByNames(QString LastName, QString FirstName);

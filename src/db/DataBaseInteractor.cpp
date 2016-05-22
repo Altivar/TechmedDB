@@ -9,7 +9,8 @@
 static DataBaseInteractor* _instance = 0;
 
 
-DataBaseInteractor::DataBaseInteractor()
+DataBaseInteractor::DataBaseInteractor() :
+m_ItemModel(1,1)
 {
 	m_DataBaseFullName = "TechmedDB.db";
 	//m_DataBasePath = ".\\..\\..\\..\\src\\db\\";
@@ -17,6 +18,7 @@ DataBaseInteractor::DataBaseInteractor()
 
 	QString l_DataBaseFullPathName = m_DataBasePath+m_DataBaseFullName;
 	m_DataBase = QSqlDatabase::addDatabase("QSQLITE",l_DataBaseFullPathName);
+
 }
 
 DataBaseInteractor::~DataBaseInteractor()
@@ -370,10 +372,12 @@ bool DataBaseInteractor::FileResearch(const QStringList& tagList, unsigned int i
 	// for debug
 	std::cout << l_Result.size() << " files found!" << std::endl ;
 
-	m_ItemModel = new QStandardItemModel(l_Result.size(), 8);
+	m_ItemModel.clear();
+	m_ItemModel.setRowCount(l_Result.size() );
+	m_ItemModel.setColumnCount(8);
 	QStringList Titles;
 	Titles << "id_File" << "file's url" << " original source file" << "Author id" << "Patient id" << "Creation date" << "Last modification date" << "MD5Sum" ;
-	m_ItemModel->setHorizontalHeaderLabels(Titles) ;
+	m_ItemModel.setHorizontalHeaderLabels(Titles) ;
 	int i = 0;
 	for(QVector<Files>::iterator aIt = l_Result.begin(); aIt != l_Result.end(); aIt++, ++i)
 	{
@@ -387,28 +391,28 @@ bool DataBaseInteractor::FileResearch(const QStringList& tagList, unsigned int i
 		QStandardItem *itemMd5Sum=new QStandardItem;
 		
 		itemId->setText(QString::number((*aIt).GetId()));
-		m_ItemModel->setItem(i, 0, itemId);
+		m_ItemModel.setItem(i, 0, itemId);
 		
 		itemURL->setText((*aIt).GetURL());
-		m_ItemModel->setItem(i, 1, itemURL);
+		m_ItemModel.setItem(i, 1, itemURL);
 
 		itemSrc->setText(QString::number((*aIt).GetSourceFile()));
-		m_ItemModel->setItem(i, 2, itemSrc);
+		m_ItemModel.setItem(i, 2, itemSrc);
 
 		itemAuthor->setText(QString::number((*aIt).GetAuthorId()));
-		m_ItemModel->setItem(i, 3, itemAuthor);
+		m_ItemModel.setItem(i, 3, itemAuthor);
 
 		itemPatient->setText(QString::number((*aIt).GetPatientId()));
-		m_ItemModel->setItem(i, 4, itemPatient);
+		m_ItemModel.setItem(i, 4, itemPatient);
 
 		itemCreation->setText((*aIt).GetFileCreationDate());
-		m_ItemModel->setItem(i, 5, itemCreation);
+		m_ItemModel.setItem(i, 5, itemCreation);
 
 		itemModification->setText((*aIt).GetFileLastModificationDate());
-		m_ItemModel->setItem(i, 6, itemModification);
+		m_ItemModel.setItem(i, 6, itemModification);
 
 		itemMd5Sum->setText((*aIt).GetFileMD5Sum());
-		m_ItemModel->setItem(i, 7, itemMd5Sum);
+		m_ItemModel.setItem(i, 7, itemMd5Sum);
 	}
 
 	if( l_Result.size() > 0 )
@@ -472,15 +476,37 @@ bool DataBaseInteractor::UserResearch(unsigned int idUser, QString LastName, QSt
 	}
 	std::cout << m_DataBase.lastError().text().toStdString() << std::endl ;
 
-	//for debug
-	std::cout << l_Result.size() << " User found!" << std::endl ;
-	QVector<Users>::iterator aIt = l_Result.begin();
-	for(aIt; aIt != l_Result.end(); aIt++)
+	m_ItemModel.clear();
+	m_ItemModel.setRowCount(l_Result.size() );
+	m_ItemModel.setColumnCount(5);
+	QStringList Titles;
+	Titles << "id_user" << "Last Name" << "First name" << "User group" << "User description" ;
+	m_ItemModel.setHorizontalHeaderLabels(Titles) ;
+	int i = 0;
+	for(QVector<Users>::iterator aIt = l_Result.begin(); aIt != l_Result.end(); aIt++, ++i)
 	{
-		std::cout << " + User : " << (*aIt).GetUserId() << std::endl ;
-		std::cout << " ---> " << (*aIt).GetLastName().toStdString() << "  " << (*aIt).GetFirstName().toStdString() << std::endl ;
+		QStandardItem *itemId=new QStandardItem;
+		QStandardItem *itemLname=new QStandardItem;
+		QStandardItem *itemFname=new QStandardItem;
+		QStandardItem *itemGroup=new QStandardItem;
+		QStandardItem *itemDesc=new QStandardItem;
+		
+		itemId->setText(QString::number((*aIt).GetUserId()));
+		m_ItemModel.setItem(i, 0, itemId);
+		
+		itemLname->setText((*aIt).GetLastName());
+		m_ItemModel.setItem(i, 1, itemLname);
+
+		itemFname->setText((*aIt).GetFirstName());
+		m_ItemModel.setItem(i, 2, itemFname);
+
+		itemGroup->setText(QString::number((*aIt).GetUserGroupId()));
+		m_ItemModel.setItem(i, 3, itemGroup);
+
+		itemDesc->setText((*aIt).GetUserDescription());
+		m_ItemModel.setItem(i, 4, itemDesc);
 	}
-	
+
 	if( l_Result.size() > 0 )
 		return true;
 	else 
@@ -520,7 +546,7 @@ unsigned int DataBaseInteractor::GetIdByTag(QString tag)
 
 }
 
-QStringList DataBaseInteractor::GetTagById(unsigned int idTag)
+bool DataBaseInteractor::GetTagById(unsigned int idTag)
 {
 	QString l_QueryStr( "SELECT tag_reference FROM Tag" );
 
@@ -536,7 +562,7 @@ QStringList DataBaseInteractor::GetTagById(unsigned int idTag)
 
 	int ref_field	= l_Query.record().indexOf("tag_reference");
 
-	unsigned int reference;
+	unsigned int reference = 0;
 	if( l_Query.next() )
 	{
 		reference = l_Query.value(ref_field).toUInt();
@@ -572,20 +598,42 @@ QStringList DataBaseInteractor::GetTagById(unsigned int idTag)
 	}
 	std::cout << m_DataBase.lastError().text().toStdString() << std::endl ;
 
-
-
-
-
-	//for debug
-	QVector<Tag>::iterator aIt = l_Result.begin();
+	
 	QStringList tagNames;
-	for(aIt; aIt != l_Result.end(); aIt++)
+
+	m_ItemModel.clear();
+	m_ItemModel.setRowCount(l_Result.size() );
+	m_ItemModel.setColumnCount(4);
+	QStringList Titles;
+	Titles << "Tag's id" << "Tag Name" << "Tag type" << "Reference's tag id" ;
+	m_ItemModel.setHorizontalHeaderLabels(Titles) ;
+	int i = 0;
+	for(QVector<Tag>::iterator aIt = l_Result.begin(); aIt != l_Result.end(); aIt++, ++i)
 	{
+		QStandardItem *itemId=new QStandardItem;
+		QStandardItem *itemname=new QStandardItem;
+		QStandardItem *itemType=new QStandardItem;
+		QStandardItem *itemRef=new QStandardItem;
+		
+		itemId->setText(QString::number((*aIt).GetId()));
+		m_ItemModel.setItem(i, 0, itemId);
+		
+		itemname->setText((*aIt).GetName());
+		m_ItemModel.setItem(i, 1, itemname);
+
+		itemType->setText(QString::number((*aIt).GetType()));
+		m_ItemModel.setItem(i, 2, itemType);
+
+		itemRef->setText(QString::number((*aIt).GetReference()));
+		m_ItemModel.setItem(i, 3, itemRef);
+
 		tagNames.append((*aIt).GetName());
 	}
-	
-	return tagNames;
-
+		
+	if( l_Result.size() > 0 )
+		return true;
+	else 
+		return false;
 }
 
 bool DataBaseInteractor::AddFile(QString filePath, unsigned int patientId)

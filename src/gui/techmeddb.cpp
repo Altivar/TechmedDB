@@ -150,11 +150,17 @@ void TechmedDB::GetUserButtonClicked()
 		return;
 
 	// request
-	DataBaseInteractor::Instance()->UserResearch(
-		((m_getuserDialog->IsIDChecked())?m_getuserDialog->GetID():0),
-		((m_getuserDialog->IsLastNameChecked())?m_getuserDialog->GetLastName():""),
-		((m_getuserDialog->IsFirstNameChecked())?m_getuserDialog->GetFirstName():""));
-
+	if( DataBaseInteractor::Instance()->UserResearch(
+													((m_getuserDialog->IsIDChecked())?m_getuserDialog->GetID():0),
+													((m_getuserDialog->IsLastNameChecked())?m_getuserDialog->GetLastName():""),
+													((m_getuserDialog->IsFirstNameChecked())?m_getuserDialog->GetFirstName():"")) )
+	{
+		ui.QueryView->setModel( DataBaseInteractor::Instance()->GetItemModel() ) ;
+		ui.QueryView->resizeColumnsToContents();
+		ui.QueryView->setEditTriggers( QAbstractItemView::NoEditTriggers ) ;
+		ui.QueryView->update() ;
+		ui.QueryView->show() ;
+	}
 }
 
 void TechmedDB::GetTagButtonClicked()
@@ -167,17 +173,28 @@ void TechmedDB::GetTagButtonClicked()
 	unsigned int id = m_gettagDialog->GetTag().toUInt(&ok, 10);
 	if(ok)
 	{
-		QStringList list = DataBaseInteractor::Instance()->GetTagById(id);
-		std::cout << "Tags found :" << std::endl;
-		for(int i = 0; i < list.size(); i++)
+		if( DataBaseInteractor::Instance()->GetTagById(id) )
 		{
-			std::cout << list.at(i).toStdString() << std::endl;
+			ui.QueryView->setModel( DataBaseInteractor::Instance()->GetItemModel() ) ;
+			ui.QueryView->resizeColumnsToContents();
+			ui.QueryView->setEditTriggers( QAbstractItemView::NoEditTriggers ) ;
+			ui.QueryView->update() ;
+			ui.QueryView->show() ;
 		}
 	}
 	else
 	{
 		unsigned int tagid = DataBaseInteractor::Instance()->GetIdByTag(m_gettagDialog->GetTag());
 		std::cout << "Id : " << tagid << std::endl;
+
+		if( DataBaseInteractor::Instance()->GetTagById(tagid) )
+		{
+			ui.QueryView->setModel( DataBaseInteractor::Instance()->GetItemModel() ) ;
+			ui.QueryView->resizeColumnsToContents();
+			ui.QueryView->setEditTriggers( QAbstractItemView::NoEditTriggers ) ;
+			ui.QueryView->update() ;
+			ui.QueryView->show() ;
+		}
 	}
 
 

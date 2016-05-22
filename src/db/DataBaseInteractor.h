@@ -69,7 +69,7 @@ private:
 	QMap<unsigned int,USER_RIGHT> m_UsersRightMap ;
 	Users m_CurrentUser ;
 
-	QStandardItemModel *m_ItemModel ;
+	QStandardItemModel m_ItemModel ;
 
 private:
 	DataBaseInteractor();
@@ -98,11 +98,11 @@ public:
 	bool FileResearch(const QStringList& tagList, unsigned int idPatient = 0, unsigned int idFile = 0, unsigned int idAuthor = 0);
 	bool UserResearch(unsigned int idUser = 0, QString LastName = QString::null, QString FirstName = QString::null );
 	unsigned int GetIdByTag(QString tag = QString::null);
-	QStringList GetTagById(unsigned int idTag = 0);
+	bool GetTagById(unsigned int idTag = 0);
 	bool AddFile(QString filePath, unsigned int patientId);
 
 	// Getter to the QStandardItemModel to set to the QTableView in the ui if a query is ok, to set the result in the tableview
-	QStandardItemModel* GetItemModel(){ return m_ItemModel ; }
+	QStandardItemModel* GetItemModel(){ return &m_ItemModel ; }
 
 };
 
