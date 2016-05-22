@@ -27,11 +27,6 @@
 #ifndef FILES_H
 #define FILES_H
 
-#include <iostream>
-#include <QtSql\qsqldatabase.h>
-#include <QtSql\qsqlquery>
-#include <QtSql\qsqltablemodel>
-#include <qstring.h>
 #include "DB_Base.h"
 
 class Files : public DB_Base
@@ -69,9 +64,7 @@ public:
 			QString FileMD5SUM
 		);
 	~Files();
-
-	//QVector<Files> GetFileFromIds( unsigned int IdFile,unsigned int IdPatient,unsigned int IdAuthor );
-
+	
 	QString GetURL(){ return m_FileUrl; }
 	//void SetURL(QString url){ m_FileUrl = url; }
 	

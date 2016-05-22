@@ -101,6 +101,7 @@ public:
 	bool GetTagById(unsigned int idTag = 0);
 	bool GetTags();
 	bool AddFile(QString filePath, unsigned int patientId);
+	bool AddUser(QString LastName, QString FirstName, QString Desc, QString psw, unsigned int GroupId, USER_RIGHT Right = STANDARD_USER);
 
 	// Getter to the QStandardItemModel to set to the QTableView in the ui if a query is ok, to set the result in the tableview
 	QStandardItemModel* GetItemModel(){ return &m_ItemModel ; }

@@ -40,11 +40,7 @@ private:
 	QString m_UserLastName;
 	QString m_UserPassword;
 	QString m_UserDescription;
-
-	QMap<unsigned int,QString> m_UserTags;
-
-	void BuildUserTagsMap();
-
+	
 
 public:
 	Users();
@@ -57,13 +53,7 @@ public:
 	QString GetUserDescription(){ return m_UserDescription;}
 	unsigned int GetUserRightCode(){ return m_UserRightRefAndName.first;}
 	unsigned int GetUserGroupId(){ return m_UserGroupRefAndName.first;}
-	QMap<unsigned int,QString> GetUserTags() { return m_UserTags; }
 
-	/*QVector<Users> GetUserByNames(QString LastName, QString FirstName);
-	QVector<Users> GetUserById(unsigned int id);*/
-
-
-	//virtual QSqlQuery GetAllTable(){ return QSqlQuery("SELECT * FROM " + this->m_TABLENAME ); }
+	void SetUserDescription(QString desc){ m_UserDescription = desc;}
 };
-
 #endif // USERS_H

@@ -84,38 +84,3 @@ m_FileMD5SUM(FileMD5SUM)
 Files::~Files()
 {
 }
-
-
-
-//QVector<Files> Files::GetFileFromIds( unsigned int IdFile,unsigned int IdPatient,unsigned int IdAuthor )
-//{
-	//QString l_QueryStr( "SELECT * FROM " + m_TABLENAME + " WHERE id_File = " + QString::number(IdFile) + " AND file_patient = " + QString::number(IdPatient)  + " AND file_author = " + QString::number(IdAuthor) + " ;");
-	//QSqlQuery l_Query = QSqlQuery(l_QueryStr);
-
-	//QVector<Files> l_Result ;
-
-	//int id_file_field						= l_Query.record().indexOf("id_File");
-	//int url_field							= l_Query.record().indexOf("file_url");
-	//int sourcefile_field					= l_Query.record().indexOf("file_source");
-	//int file_author_field					= l_Query.record().indexOf("file_author");
-	//int file_patient_field					= l_Query.record().indexOf("file_patient");
-	//int file_creation_date_field			= l_Query.record().indexOf("file_creation_date");
-	//int file_last_modification_date_field	= l_Query.record().indexOf("file_last_modification_date");
-	//int file_md5sum_field					= l_Query.record().indexOf("file_md5sum");
-
-
-	//while( l_Query.next() )
-	//{
-	//	l_Result.push_back( Files(	l_Query.value(id_file_field).toUInt(),
-	//								l_Query.value(url_field).toString(),
-	//								l_Query.value(sourcefile_field).toUInt(),
-	//								l_Query.value(file_author_field).toUInt(),
-	//								l_Query.value(file_patient_field).toUInt(),
-	//								l_Query.value(file_creation_date_field).toString(),
-	//								l_Query.value(file_last_modification_date_field).toString(),
-	//								l_Query.value(file_md5sum_field).toString()
-	//							 )) ;
-	//								
-	//}
-	//return l_Result;
-//}

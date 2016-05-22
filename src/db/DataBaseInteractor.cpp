@@ -556,12 +556,12 @@ bool DataBaseInteractor::GetTags()
 	int type_field = l_Query.record().indexOf("tag_type");
 	int ref_field  = l_Query.record().indexOf("tag_reference");
 
-	QVector<Tag> l_Result ;
+	QVector<Tags> l_Result ;
 	while( l_Query.next() )
 	{
 		if( l_Query.value(type_field).toUInt() != 5 || m_UsersRightMap[m_CurrentUser.GetUserRightCode()] == ADMINISTRATOR_USER )
 		{
-			l_Result.push_back( Tag(	l_Query.value(id_field).toUInt(),
+			l_Result.push_back( Tags(	l_Query.value(id_field).toUInt(),
 										l_Query.value(name_field).toString(),
 										l_Query.value(type_field).toUInt(),
 										l_Query.value(ref_field).toUInt() ) ) ;
@@ -578,7 +578,7 @@ bool DataBaseInteractor::GetTags()
 	Titles << "Tag's id" << "Tag Name" << "Tag type" << "Reference's tag id" ;
 	m_ItemModel.setHorizontalHeaderLabels(Titles) ;
 	int i = 0;
-	for(QVector<Tag>::iterator aIt = l_Result.begin(); aIt != l_Result.end(); aIt++, ++i)
+	for(QVector<Tags>::iterator aIt = l_Result.begin(); aIt != l_Result.end(); aIt++, ++i)
 	{
 		QStandardItem *itemId=new QStandardItem;
 		QStandardItem *itemname=new QStandardItem;
@@ -648,12 +648,12 @@ bool DataBaseInteractor::GetTagById(unsigned int idTag)
 	int type_field	= l_Query.record().indexOf("tag_type");
 	ref_field	= l_Query.record().indexOf("tag_reference");
 
-	QVector<Tag> l_Result ;
+	QVector<Tags> l_Result ;
 	while( l_Query.next() )
 	{
 		if( l_Query.value(type_field).toUInt() != 5 || m_UsersRightMap[m_CurrentUser.GetUserRightCode()] == ADMINISTRATOR_USER )
 		{
-			l_Result.push_back( Tag(	l_Query.value(id_field).toUInt(),
+			l_Result.push_back( Tags(	l_Query.value(id_field).toUInt(),
 										l_Query.value(name_field).toString(),
 										l_Query.value(type_field).toUInt(),
 										l_Query.value(ref_field).toUInt() ) ) ;
@@ -670,7 +670,7 @@ bool DataBaseInteractor::GetTagById(unsigned int idTag)
 	Titles << "Tag's id" << "Tag Name" << "Tag type" << "Reference's tag id" ;
 	m_ItemModel.setHorizontalHeaderLabels(Titles) ;
 	int i = 0;
-	for(QVector<Tag>::iterator aIt = l_Result.begin(); aIt != l_Result.end(); aIt++, ++i)
+	for(QVector<Tags>::iterator aIt = l_Result.begin(); aIt != l_Result.end(); aIt++, ++i)
 	{
 		QStandardItem *itemId=new QStandardItem;
 		QStandardItem *itemname=new QStandardItem;
@@ -740,5 +740,32 @@ bool DataBaseInteractor::AddFile(QString filePath, unsigned int patientId)
 
 }
 
+bool DataBaseInteractor::AddUser(QString LastName, QString FirstName, QString Desc, QString psw, unsigned int GroupId, USER_RIGHT Right)
+{
+	if( m_UsersRightMap[m_CurrentUser.GetUserRightCode()] == ADMINISTRATOR_USER )
+	{
+		QString l_QueryStr( "INSERT INTO User (user_lastname, user_firstname, user_group, user_right, user_description,user_passeword) VALUES ('") ;
+		l_QueryStr += LastName;
+		l_QueryStr += "', '";
+		l_QueryStr += FirstName;
+		l_QueryStr += "', '";
+		l_QueryStr += QString::number(GroupId);
+		l_QueryStr += "', '";
+		unsigned int defaultKey = m_UsersRightMap.key(GUEST_USER);
+		l_QueryStr += QString::number( m_UsersRightMap.key( Right, defaultKey ) );
+		l_QueryStr += "', '";
+		l_QueryStr += Desc;
+		l_QueryStr += "', '";
+		l_QueryStr += psw;
+		l_QueryStr += "');";
 
-
+		QSqlQuery l_Query = m_DataBase.exec(l_QueryStr);	
+		std::cout << m_DataBase.lastError().text().toStdString() << std::endl ;
+		return true;
+	}
+	else
+	{
+		std::cout << " You are not administrator, so you can not add an user, please contact your administrator." << std::endl ;
+		return false;
+	}
+}
