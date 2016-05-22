@@ -368,10 +368,7 @@ bool DataBaseInteractor::FileResearch(const QStringList& tagList, unsigned int i
 									
 	}
 	std::cout << m_DataBase.lastError().text().toStdString() << std::endl ;
-
-	// for debug
-	std::cout << l_Result.size() << " files found!" << std::endl ;
-
+	
 	m_ItemModel.clear();
 	m_ItemModel.setRowCount(l_Result.size() );
 	m_ItemModel.setColumnCount(8);
@@ -414,6 +411,9 @@ bool DataBaseInteractor::FileResearch(const QStringList& tagList, unsigned int i
 		itemMd5Sum->setText((*aIt).GetFileMD5Sum());
 		m_ItemModel.setItem(i, 7, itemMd5Sum);
 	}
+	
+	// for debug
+	std::cout << l_Result.size() << " files found!" << std::endl ;
 
 	if( l_Result.size() > 0 )
 		return true;
@@ -506,7 +506,7 @@ bool DataBaseInteractor::UserResearch(unsigned int idUser, QString LastName, QSt
 		itemDesc->setText((*aIt).GetUserDescription());
 		m_ItemModel.setItem(i, 4, itemDesc);
 	}
-
+	std::cout << l_Result.size() << " users found." << std::endl ;
 	if( l_Result.size() > 0 )
 		return true;
 	else 
@@ -546,58 +546,28 @@ unsigned int DataBaseInteractor::GetIdByTag(QString tag)
 
 }
 
-bool DataBaseInteractor::GetTagById(unsigned int idTag)
+bool DataBaseInteractor::GetTags()
 {
-	QString l_QueryStr( "SELECT tag_reference FROM Tag" );
-
-	if( idTag > 0 )
-	{
-		l_QueryStr+= " WHERE id_tag = '" + QString::number(idTag) + "'" ;
-	}
-	l_QueryStr+=";";
-
+	QString l_QueryStr( "SELECT * FROM Tag" );
 	QSqlQuery l_Query = m_DataBase.exec(l_QueryStr);
 
-	
-
-	int ref_field	= l_Query.record().indexOf("tag_reference");
-
-	unsigned int reference = 0;
-	if( l_Query.next() )
-	{
-		reference = l_Query.value(ref_field).toUInt();
-	}
-	std::cout << m_DataBase.lastError().text().toStdString() << std::endl ;
-
-
-
-	l_QueryStr = "SELECT * FROM Tag";
-	if( reference > 0 )
-	{
-		l_QueryStr+= " WHERE id_tag = '" + QString::number(reference) + "' OR tag_reference = '" + QString::number(reference) + "'";
-	}
-	else
-	{
-		l_QueryStr+= " WHERE id_tag = '" + QString::number(idTag) + "' OR tag_reference = '" + QString::number(idTag) + "'";
-	}
-	l_QueryStr+=";";
-	l_Query = m_DataBase.exec(l_QueryStr);
-
-	int id_field		= l_Query.record().indexOf("id_tag");
+	int id_field   = l_Query.record().indexOf("id_tag");
 	int name_field = l_Query.record().indexOf("tag_name");
-	int type_field	= l_Query.record().indexOf("tag_type");
-	ref_field	= l_Query.record().indexOf("tag_reference");
+	int type_field = l_Query.record().indexOf("tag_type");
+	int ref_field  = l_Query.record().indexOf("tag_reference");
 
 	QVector<Tag> l_Result ;
 	while( l_Query.next() )
 	{
-		l_Result.push_back( Tag(	l_Query.value(id_field).toUInt(),
-									l_Query.value(name_field).toString(),
-									l_Query.value(type_field).toUInt(),
-									l_Query.value(ref_field).toUInt() ) ) ;
+		if( l_Query.value(type_field).toUInt() != 5 || m_UsersRightMap[m_CurrentUser.GetUserRightCode()] == ADMINISTRATOR_USER )
+		{
+			l_Result.push_back( Tag(	l_Query.value(id_field).toUInt(),
+										l_Query.value(name_field).toString(),
+										l_Query.value(type_field).toUInt(),
+										l_Query.value(ref_field).toUInt() ) ) ;
+		}
 	}
 	std::cout << m_DataBase.lastError().text().toStdString() << std::endl ;
-
 	
 	QStringList tagNames;
 
@@ -630,6 +600,99 @@ bool DataBaseInteractor::GetTagById(unsigned int idTag)
 		tagNames.append((*aIt).GetName());
 	}
 		
+	std::cout << l_Result.size() << " tags found." << std::endl ;
+	if( l_Result.size() > 0 )
+		return true;
+	else 
+		return false;
+}
+
+
+bool DataBaseInteractor::GetTagById(unsigned int idTag)
+{
+	QString l_QueryStr( "SELECT tag_reference FROM Tag" );
+
+	if( idTag > 0 )
+	{
+		l_QueryStr+= " WHERE id_tag = '" + QString::number(idTag) + "'" ;
+	}
+	l_QueryStr+=";";
+
+	QSqlQuery l_Query = m_DataBase.exec(l_QueryStr);	
+
+	int ref_field	= l_Query.record().indexOf("tag_reference");
+
+	unsigned int reference = 0;
+	if( l_Query.next() )
+	{
+		reference = l_Query.value(ref_field).toUInt();
+	}
+	std::cout << m_DataBase.lastError().text().toStdString() << std::endl ;
+
+
+
+	l_QueryStr = "SELECT * FROM Tag";
+	if( reference > 0 )
+	{
+		l_QueryStr+= " WHERE id_tag = '" + QString::number(reference) + "' OR tag_reference = '" + QString::number(reference) + "'";
+	}
+	else
+	{
+		l_QueryStr+= " WHERE id_tag = '" + QString::number(idTag) + "' OR tag_reference = '" + QString::number(idTag) + "'";
+	}
+	l_QueryStr+=";";
+	l_Query = m_DataBase.exec(l_QueryStr);
+
+	int id_field		= l_Query.record().indexOf("id_tag");
+	int name_field = l_Query.record().indexOf("tag_name");
+	int type_field	= l_Query.record().indexOf("tag_type");
+	ref_field	= l_Query.record().indexOf("tag_reference");
+
+	QVector<Tag> l_Result ;
+	while( l_Query.next() )
+	{
+		if( l_Query.value(type_field).toUInt() != 5 || m_UsersRightMap[m_CurrentUser.GetUserRightCode()] == ADMINISTRATOR_USER )
+		{
+			l_Result.push_back( Tag(	l_Query.value(id_field).toUInt(),
+										l_Query.value(name_field).toString(),
+										l_Query.value(type_field).toUInt(),
+										l_Query.value(ref_field).toUInt() ) ) ;
+		}
+	}
+	std::cout << m_DataBase.lastError().text().toStdString() << std::endl ;
+	
+	QStringList tagNames;
+
+	m_ItemModel.clear();
+	m_ItemModel.setRowCount(l_Result.size() );
+	m_ItemModel.setColumnCount(4);
+	QStringList Titles;
+	Titles << "Tag's id" << "Tag Name" << "Tag type" << "Reference's tag id" ;
+	m_ItemModel.setHorizontalHeaderLabels(Titles) ;
+	int i = 0;
+	for(QVector<Tag>::iterator aIt = l_Result.begin(); aIt != l_Result.end(); aIt++, ++i)
+	{
+		QStandardItem *itemId=new QStandardItem;
+		QStandardItem *itemname=new QStandardItem;
+		QStandardItem *itemType=new QStandardItem;
+		QStandardItem *itemRef=new QStandardItem;
+		
+		itemId->setText(QString::number((*aIt).GetId()));
+		m_ItemModel.setItem(i, 0, itemId);
+		
+		itemname->setText((*aIt).GetName());
+		m_ItemModel.setItem(i, 1, itemname);
+
+		itemType->setText(QString::number((*aIt).GetType()));
+		m_ItemModel.setItem(i, 2, itemType);
+
+		itemRef->setText(QString::number((*aIt).GetReference()));
+		m_ItemModel.setItem(i, 3, itemRef);
+
+		tagNames.append((*aIt).GetName());
+	}
+		
+	std::cout << l_Result.size() << " tags found." << std::endl ;
 	if( l_Result.size() > 0 )
 		return true;
 	else 

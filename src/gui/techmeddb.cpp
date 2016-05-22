@@ -77,11 +77,30 @@ void TechmedDB::ConnectionbuttonClicked()
 		m_connectionDialog->exec();
 
 		if(m_connectionDialog->IsFreeVisitSelected())
+			result = GUEST_USER;
+		else
+		{
+			// test connection here
+			result = DataBaseInteractor::Instance()->UserConnection(m_connectionDialog->GetConnectionId(), m_connectionDialog->GetConnectionPassword());
+		}
+		switch( result )
+		{
+		case ERROR_NO_RIGHT :
+			std::cout << "Not Connected" << std::endl;
+			continue;
 			break;
-
-		// test connection here
-		result = DataBaseInteractor::Instance()->UserConnection(m_connectionDialog->GetConnectionId(), m_connectionDialog->GetConnectionPassword());
-		std::cout << result << std::endl;
+		case GUEST_USER :
+			std::cout << "Connected as guest user" << std::endl;
+			isConnected = true;
+			break;
+		case STANDARD_USER :
+			std::cout << "Connected as standard user" << std::endl;
+			break;
+		case ADMINISTRATOR_USER :
+			std::cout << "Connected as administrator" << std::endl;
+			break;
+		}
+		
 
 		if(result == ERROR_NO_RIGHT)
 			continue;
@@ -171,9 +190,9 @@ void TechmedDB::GetTagButtonClicked()
 
 	bool ok;
 	unsigned int id = m_gettagDialog->GetTag().toUInt(&ok, 10);
-	if(ok)
+	if( m_gettagDialog->GetTag().isEmpty() )
 	{
-		if( DataBaseInteractor::Instance()->GetTagById(id) )
+		if( DataBaseInteractor::Instance()->GetTags() )
 		{
 			ui.QueryView->setModel( DataBaseInteractor::Instance()->GetItemModel() ) ;
 			ui.QueryView->resizeColumnsToContents();
@@ -184,19 +203,32 @@ void TechmedDB::GetTagButtonClicked()
 	}
 	else
 	{
-		unsigned int tagid = DataBaseInteractor::Instance()->GetIdByTag(m_gettagDialog->GetTag());
-		std::cout << "Id : " << tagid << std::endl;
-
-		if( DataBaseInteractor::Instance()->GetTagById(tagid) )
+		if(ok)
 		{
-			ui.QueryView->setModel( DataBaseInteractor::Instance()->GetItemModel() ) ;
-			ui.QueryView->resizeColumnsToContents();
-			ui.QueryView->setEditTriggers( QAbstractItemView::NoEditTriggers ) ;
-			ui.QueryView->update() ;
-			ui.QueryView->show() ;
+			if( DataBaseInteractor::Instance()->GetTagById(id) )
+			{
+				ui.QueryView->setModel( DataBaseInteractor::Instance()->GetItemModel() ) ;
+				ui.QueryView->resizeColumnsToContents();
+				ui.QueryView->setEditTriggers( QAbstractItemView::NoEditTriggers ) ;
+				ui.QueryView->update() ;
+				ui.QueryView->show() ;
+			}
+		}
+		else
+		{
+			unsigned int tagid = DataBaseInteractor::Instance()->GetIdByTag(m_gettagDialog->GetTag());
+			std::cout << "Id : " << tagid << std::endl;
+
+			if( DataBaseInteractor::Instance()->GetTagById(tagid) )
+			{
+				ui.QueryView->setModel( DataBaseInteractor::Instance()->GetItemModel() ) ;
+				ui.QueryView->resizeColumnsToContents();
+				ui.QueryView->setEditTriggers( QAbstractItemView::NoEditTriggers ) ;
+				ui.QueryView->update() ;
+				ui.QueryView->show() ;
+			}
 		}
 	}
-
 
 }
 

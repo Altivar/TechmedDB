@@ -99,6 +99,7 @@ public:
 	bool UserResearch(unsigned int idUser = 0, QString LastName = QString::null, QString FirstName = QString::null );
 	unsigned int GetIdByTag(QString tag = QString::null);
 	bool GetTagById(unsigned int idTag = 0);
+	bool GetTags();
 	bool AddFile(QString filePath, unsigned int patientId);
 
 	// Getter to the QStandardItemModel to set to the QTableView in the ui if a query is ok, to set the result in the tableview
