@@ -30,7 +30,7 @@
 #include <qstring.h>
 
 
-#include "ui_connectiondialog.h"
+#include "ui_connectionDialog.h"
 
 class connectionDialog : public QDialog
 {

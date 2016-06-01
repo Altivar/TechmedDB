@@ -1,4 +1,5 @@
 #include "DataBaseInteractor.h"
+#include <QtSql/QSqlRecord>
 
 
 #include <qmessagebox.h>

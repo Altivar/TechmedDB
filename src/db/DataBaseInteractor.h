@@ -29,14 +29,12 @@
 
 #include <iostream>
 #include <vector>
-#include <QtSql\qsql_sqlite.h>
-#include <QtSql\qsqldatabase.h>
-#include <QtSql\qsqlquery>
-#include <QtSql\qsqltablemodel>
-#include <QtSql\qsqlerror>
-#include <QtSql\qsql_sqlite.h>
-#include <qfile.h>
-#include <qstring.h>
+#include <QtSql/QSqlDatabase>
+#include <QtSql/QSqlQuery>
+#include <QtSql/QSqlTableModel>
+#include <QtSql/QSqlError>
+#include <QFile>
+#include <QString>
 #include <qstandarditemmodel.h>
 #include "TDB_DLL_Export.h"
 
