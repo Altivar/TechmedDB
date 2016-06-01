@@ -28,10 +28,10 @@
 #define DB_BASE_H
 
 #include <iostream>
-#include <QtSql\qsqldatabase.h>
-#include <QtSql\qsqlquery>
-#include <QtSql\qsqltablemodel>
-#include <QtSql\qsqlrecord.h>
+#include <QtSql/QSqlDatabase>
+#include <QtSql/QSqlQuery>
+#include <QtSql/QSqlTableModel>
+#include <QtSql/QSqlError>
 #include <qpair.h>
 #include <qstring.h>
 #include <qmap.h>
